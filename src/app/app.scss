@@ -14,3 +14,73 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+ion-menu{
+  ion-content{
+    background: linear-gradient(#2b405d, #1c232c);
+  }
+}
+
+side-menu-content {
+
+  // Single option
+  // ------------------
+  ion-item.item.item-block.option {
+    background-color: #1b283a;
+    color: #fbf8f8;
+
+    &.active-side-menu-option {
+      background-color: #1c232c;
+      color: #fbf8f8;
+      font-weight: 700;
+    }
+  }
+
+  // Header
+  // ------------------
+  ion-item.item.item-block.header {
+    background-color: #1b283a;
+    color: #fbf8f8;
+
+    &.active-side-menu-option {
+      background-color: #1c232c;
+      color: #fbf8f8;
+      font-weight: 700;
+    }
+  }
+
+  // Sub option
+  // ------------------
+  ion-item.item.item-block.sub-option {
+    background-color: #2b405d;
+    color: #fbf8f8;
+
+    &.active-side-menu-option {
+      color: #1b283a;
+      background-color: #71889f;
+      font-weight: 700;
+    }
+  }
+}
+
+.side-nav-button{
+  font-size: 15px;
+  color: white;
+  background-color: transparent;
+}
+
+.fa-calendar{
+  color: #5fc1be;
+}
+.fa-hashtag{
+  color: #4ec6e1;
+}
+.fa-users{
+  color: #f5f5c6;
+}
+.fa-cogs{
+  color: #567db1;
+}
+.fa-sign-out{
+  color: #fbf8f8;
+}

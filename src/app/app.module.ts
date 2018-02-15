@@ -6,9 +6,15 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
 
+// Custom Components
+import {SideMenuContentComponent} from "../shared/side-menu-content/side-menu-content.component";
+
 @NgModule({
   declarations: [
-    MyApp
+    MyApp,
+
+      // Side Menu Custom Component
+      SideMenuContentComponent
   ],
   imports: [
     BrowserModule,

@@ -25,9 +25,13 @@ export class LoginPage {
 
   presentToast(){
     this.toast.create({
-        message: "Welcome back, Mothafakaaa",
+        message: "Welcome back, USERNAME",
         duration: 3000
     }).present();
+  }
+
+  doLogin(){
+    this.navCtrl.setRoot('HomePage');
   }
 
 }

@@ -33,7 +33,9 @@
 
     <ion-row class="loginBtn">
       <button ion-button default block color="brighter"
-              (click)="presentToast()">Log In</button>
+              (click)="presentToast()"
+              (click)="navigateToPage('HomePage')"
+              (click)="doLogin()">Log In</button>
     </ion-row>
 
     <ion-row>

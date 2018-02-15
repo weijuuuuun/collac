@@ -1,1 +1,71 @@
-<ion-nav [root]="rootPage"></ion-nav>
+<!--<ion-menu side="left" [content]="content" [swipeEnabled]="false" xmlns="http://www.w3.org/1999/html">-->
+
+    <!--<ion-header padding>-->
+        <!--<div class="spacer" style="width: 100%; height:2%"></div>-->
+        <!--<img src="assets/img/smallLogo.png" alt="logo" class="smalllogo">-->
+        <!--<div class="spacer" style="width: 100%; height:2%"></div>-->
+    <!--</ion-header>-->
+
+    <!--<ion-content padding>-->
+        <!--<ion-list>-->
+            <!--<ion-item class="side-nav-button">-->
+                <!--<i class="fa fa-hashtag" aria-hidden="true" item-start></i>-->
+                <!--<ion-label>Topics</ion-label>-->
+            <!--</ion-item>-->
+
+            <!--<ion-item class="side-nav-button">-->
+                <!--<i class="fa fa-hourglass-half" aria-hidden="true" item-start></i>-->
+                <!--<ion-label>Task</ion-label>-->
+                <!--<ion-badge item-end color="danger">10</ion-badge>-->
+            <!--</ion-item>-->
+
+            <!--<ion-item class="side-nav-button">-->
+                <!--<i class="fa fa-commenting" aria-hidden="true" item-start></i>-->
+                <!--<ion-label>Messages</ion-label>-->
+                <!--<ion-badge item-end color="danger">1</ion-badge>-->
+            <!--</ion-item>-->
+
+            <!--<ion-item class="side-nav-button">-->
+                <!--<i class="fa fa-users" aria-hidden="true" item-start></i>-->
+                <!--<ion-label>Groups</ion-label>-->
+            <!--</ion-item>-->
+
+
+        <!--</ion-list>-->
+    <!--</ion-content>-->
+
+    <!--<ion-footer>-->
+        <!--<ion-item class="side-nav-button" no-lines>-->
+            <!--<i class="fa fa-sign-out" aria-hidden="true"></i>-->
+            <!--<ion-label>Logout</ion-label>-->
+        <!--</ion-item>-->
+    <!--</ion-footer>-->
+<!--</ion-menu>-->
+
+<ion-menu persistent="true" [swipeEnabled]="false" [content]="content" (ionClose)="collapseMenuOptions()">
+
+    <ion-header padding>
+    <div class="spacer" style="width: 100%; height:2%"></div>
+    <img src="assets/img/smallLogo.png" alt="logo" class="smalllogo">
+    <div class="spacer" style="width: 100%; height:2%"></div>
+    </ion-header>
+
+    <ion-content>
+
+        <!-- Side Menu -->
+        <side-menu-content [settings]="sideMenuSettings" [options]="options" (selectOption)="selectOption($event)"></side-menu-content>
+
+    </ion-content>
+
+    <ion-footer>
+    <ion-item class="side-nav-button" no-lines>
+        <i class="fa fa-sign-out" aria-hidden="true"
+           menuClose
+           (click)="presentToast()"
+           (click)="navigateToPage('LoginPage')"
+           (click)="doLogout()"></i>
+    </ion-item>
+    </ion-footer>
+</ion-menu>
+
+<ion-nav #content [root]="rootPage"></ion-nav>
