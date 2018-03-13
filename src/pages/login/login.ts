@@ -1,19 +1,13 @@
 import { Component } from '@angular/core';
 import {IonicPage, NavController, ToastController} from 'ionic-angular';
 
-/**
- * Generated class for the LoginPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
 })
 export class LoginPage {
+    username: string;
 
   constructor(private navCtrl: NavController,
               private toast: ToastController) {
@@ -23,9 +17,13 @@ export class LoginPage {
     this.navCtrl.push(pageName);
   }
 
+  getUsername(){
+
+  }
+
   presentToast(){
     this.toast.create({
-        message: "Welcome back, USERNAME",
+        message: "Welcome back, " + this.username,
         duration: 3000
     }).present();
   }
