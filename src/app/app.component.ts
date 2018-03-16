@@ -11,6 +11,8 @@ import {SideMenuContentComponent} from "../shared/side-menu-content/side-menu-co
 import {MenuOptionModel} from "../shared/side-menu-content/models/menu-option-model";
 import {SideMenuSettings} from "../shared/side-menu-content/models/side-menu-settings";
 import {HomePage} from "../pages/home/home";
+import {GroupPage} from "../pages/group/group";
+import {ContactPage} from "../pages/contact/contact";
 
 
 
@@ -149,9 +151,15 @@ export class MyApp {
       // Load simple menu options
       // ------------------------------------------
       this.options.push({
+          iconName: 'fa fa-address-book',
+          displayName: 'Contacts',
+          component: ContactPage,
+
+      });
+      this.options.push({
           iconName: 'fa fa-users',
           displayName: 'Groups',
-          component: HomePage,
+          component: GroupPage,
 
       });
       this.options.push({

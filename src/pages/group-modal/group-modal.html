@@ -1,0 +1,25 @@
+<ion-header text-center>
+  <button ion-button clear (click)="dismiss()" class="btn-cancel-save">CANCEL</button>
+  <button ion-button clear (click)="save()" class="btn-cancel-save">SAVE</button>
+</ion-header>
+
+
+<ion-content class="masters">
+  <h1 padding-horizontal class="h1-header">Create New Group</h1>
+  <ion-list>
+    <ion-item>
+      <ion-input placeholder="Group Name" [(ngModel)]="group.name"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Add members</ion-label>
+      <ion-select [(ngModel)]="group.members" multiple="true">
+        <ion-option>Apple</ion-option>
+        <ion-option>Bob</ion-option>
+        <ion-option>Canny</ion-option>
+        <ion-option>Do</ion-option>
+      </ion-select>
+    </ion-item>
+
+  </ion-list>
+</ion-content>

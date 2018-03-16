@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons left>
+      <button ion-button icon-only menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content padding class="masters">
+  <h1 class="h1-header">Contacts</h1>
+  <ion-list>
+    <button ion-item clear
+            *ngFor="let contactList of contactLists"
+            (click)="contactSelected(contactList)">
+      {{contactList.name}}
+    </button>
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar color="dark">
+    <ion-buttons end>
+      <button ion-button icon-only (click)="createAlert()">
+        <ion-icon name="md-add"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>
