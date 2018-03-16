@@ -100,7 +100,7 @@ export class HomePage {
       return events;
   }
 
-  ionViewDidLoad(){
+  ionViewWillEnter(){
       this.eventSource = this.loadRandomEvents();
   }
 }
