@@ -11,6 +11,8 @@ import {SideMenuContentComponent} from "../shared/side-menu-content/side-menu-co
 import {GroupPage} from "../pages/group/group";
 import { DataProvider } from '../providers/data/data';
 import {ContactPage} from "../pages/contact/contact";
+import {AuthenticationService} from "../providers/AuthenticationService";
+import {HttpClientModule} from "@angular/common/http";
 
 
 @NgModule({
@@ -22,6 +24,7 @@ import {ContactPage} from "../pages/contact/contact";
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
@@ -34,7 +37,8 @@ import {ContactPage} from "../pages/contact/contact";
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    DataProvider
+    DataProvider,
+    AuthenticationService,
   ]
 })
 export class AppModule {}
