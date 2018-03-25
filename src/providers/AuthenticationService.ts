@@ -1,9 +1,7 @@
 import {Injectable} from "@angular/core";
-import {User} from "../models/User";
 import {Credential} from "../models/Credential";
-import {backendUrl} from "../Configurations";
 import {HttpClient, HttpResponse} from "@angular/common/http";
-import {Observable} from "rxjs/Observable";
+import {backendUrl} from "../Configurations";
 
 @Injectable()
 export class AuthenticationService {
@@ -27,7 +25,9 @@ export class AuthenticationService {
             password
         };
 
-        return this.http.post(`${backendUrl}/authenticate`, credential);
+        console.log("Called " + backendUrl);
+
+        return this.http.post(`http://localhost:9001/authenticate`, credential);
     }
 
 

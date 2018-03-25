@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {IonicPage, NavController, ToastController} from 'ionic-angular';
 import {AuthenticationService} from "../../providers/AuthenticationService";
 import {User} from "../../models/User";
+import {EventService} from "../../providers/EventService";
 
 @IonicPage()
 @Component({
@@ -14,12 +15,32 @@ export class LoginPage {
 
   constructor(private navCtrl: NavController,
               private toast: ToastController,
-              private authenticationService: AuthenticationService) {
+              private authenticationService: AuthenticationService,
+              private eventService: EventService) {
   }
+
+  // ngOnInit() {
+  //     this.testGraphQLQuery();
+  // }
 
   // navigateToPage(pageName:string){
   //   this.navCtrl.push(pageName);
   // }
+
+    /**
+     * Example of calling query with graphql server.
+     */
+  testGraphQLQuery() {
+      console.log("test graphql queury called");
+      this.eventService.queryEvent()
+          .subscribe(data => {
+              console.log("success getting graphql data");
+              console.log(data);
+          }, err => {
+              console.log("error getting graphql data");
+              console.log(err);
+          })
+  }
 
   getUsername(){
 
@@ -33,6 +54,7 @@ export class LoginPage {
   }
 
   doLogin(){
+    this.testGraphQLQuery();
     this.authenticationService.authenticate(this.username, this.password)
         .subscribe(response => {
           console.log("success");

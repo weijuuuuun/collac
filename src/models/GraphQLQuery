@@ -1,0 +1,13 @@
+import {User} from "./User";
+import {Task} from "./Task";
+
+export interface Query {
+    events: Event[];
+    event: Event;
+
+    users: User[];
+    user: User;
+
+    tasks:Task[];
+    task: Task;
+}

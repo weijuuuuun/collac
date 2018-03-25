@@ -1,7 +1,7 @@
 import {User} from "./User";
 import {Task} from "./Task";
 
-export class Event {
+export interface Event {
 
     id?: number;
     title?: string;
