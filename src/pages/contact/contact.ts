@@ -15,6 +15,8 @@ export class ContactPage {
               public alertCtrl: AlertController) {
   }
 
+
+
   ionViewDidLoad() {
     this.contactLists = this.data.contacts;
     console.log('here');

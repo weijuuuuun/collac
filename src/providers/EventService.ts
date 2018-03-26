@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {Apollo} from "apollo-angular";
 import gql from "graphql-tag";
 import {map} from "rxjs/operators";
-import {Query} from "../models/GraphQLQuery";
+
 
 @Injectable()
 export class EventService {
@@ -23,7 +23,7 @@ export class EventService {
      * Making a GraphQL Call
      * @returns {Observable<any>}
      */
-    public queryEvent() {
+    public queryEvent(eventID: number) {
 
         console.log("Querying apollo");
 
@@ -31,7 +31,7 @@ export class EventService {
         return this.apollo.watchQuery<any>({
             query: gql`
                 query {
-                    event(id: ${1}) {
+                    event(id: ${eventID}) {
                     id,
                     title
                   }

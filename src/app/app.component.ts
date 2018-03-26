@@ -3,18 +3,13 @@ import {AlertController, MenuController, Nav, Platform, ToastController} from 'i
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
-// RxJS
 import {ReplaySubject} from "rxjs/ReplaySubject";
-
-// Side Menu Component
 import {SideMenuContentComponent} from "../shared/side-menu-content/side-menu-content.component";
 import {MenuOptionModel} from "../shared/side-menu-content/models/menu-option-model";
 import {SideMenuSettings} from "../shared/side-menu-content/models/side-menu-settings";
 import {HomePage} from "../pages/home/home";
 import {GroupPage} from "../pages/group/group";
 import {ContactPage} from "../pages/contact/contact";
-
-
 
 
 @Component({

@@ -8,7 +8,6 @@ import { Injectable } from '@angular/core';
 */
 @Injectable()
 export class DataProvider {
-
   groups:any =[
       {
           name:'Group One',

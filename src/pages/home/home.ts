@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import {AlertController, IonicPage, ModalController, NavController, NavParams} from 'ionic-angular';
 import * as moment from "moment";
+import {ChatPage} from "../chat/chat";
+import {LoginPage} from "../login/login";
+import {Storage} from "@ionic/storage";
 
 
 @IonicPage()
@@ -12,6 +15,7 @@ export class HomePage {
   eventSource = [];
   viewTitle: string;
   selectedDay = new Date();
+  username: string;
 
   calendar = {
       mode: 'month',
@@ -20,6 +24,7 @@ export class HomePage {
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
+              public  storage: Storage,
               private modalCtrl: ModalController,
               private alertCtrl: AlertController) {
   }
@@ -47,6 +52,12 @@ export class HomePage {
     });
   }
 
+  ionViewWilload() {
+      // when the page will load, this method is called
+      // call the backend, to retrieve data on events
+      // get the data, display in html
+  }
+
   // Display Month
   onTitleChanged(title){
       this.viewTitle = title;
@@ -70,7 +81,24 @@ export class HomePage {
       let alert = this.alertCtrl.create({
           title: '' + event.title,
           subTitle: 'From: ' + start + '<br>To: ' + end + '<br>With: ' + event.group,
-          buttons: ['Dismiss']
+          buttons: [
+              {
+                  text: 'Cancel',
+                  role: 'cancel',
+                  handler: () => {
+                      console.log('Cancelled')
+                  }
+              },
+              {
+                text: 'Edit',
+              },
+              {
+                  text: "Message",
+                  handler: () => {
+                      console.log('Open messanger');
+                  }
+              }
+          ]
       });
       alert.present();
 
@@ -93,15 +121,29 @@ export class HomePage {
           events.push({
               title: 'Random Event - ' + i,
               startTime: startTime,
-              endTime: endTime,
+              endTime: endTime,  // get ridz
               allDay: false
           });
       }
       return events;
   }
 
+  launchChat(){
+
+      this.storage.get('username').then((val) => {
+          console.log('Your name is', val);
+          this.navCtrl.push(ChatPage,{
+              username: val
+          });
+      });
+
+      // this.navCtrl.push(ChatPage,{
+      //     username: this.storage.get('username');
+      // });
+  }
+
   ionViewWillEnter(){
-      this.eventSource = this.loadRandomEvents();
+      //this.eventSource = this.loadRandomEvents();
   }
 }
 

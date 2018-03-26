@@ -18,7 +18,7 @@
 
     <ion-item class="itemform">
         <ion-label color="light"><ion-icon name="ios-person-outline"></ion-icon></ion-label>
-        <ion-input placeholder="Username" [(ngModel)]="username" type="text"></ion-input>
+        <ion-input placeholder="E-mail Address" [(ngModel)]="username" type="text"></ion-input>
     </ion-item>
 
     <ion-item class="itemform">
@@ -28,7 +28,6 @@
 
     <ion-row class="loginBtn">
       <button ion-button default block color="brighter"
-              (click)="presentToast()"
               (click)="doLogin()">Log In</button>
     </ion-row>
 

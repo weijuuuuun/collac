@@ -3,6 +3,8 @@ import {IonicPage, NavController, ToastController} from 'ionic-angular';
 import {AuthenticationService} from "../../providers/AuthenticationService";
 import {User} from "../../models/User";
 import {EventService} from "../../providers/EventService";
+import {Storage} from "@ionic/storage";
+import {any} from "async";
 
 @IonicPage()
 @Component({
@@ -16,66 +18,100 @@ export class LoginPage {
   constructor(private navCtrl: NavController,
               private toast: ToastController,
               private authenticationService: AuthenticationService,
-              private eventService: EventService) {
+              private eventService: EventService,
+              private storage: Storage) {
   }
 
   // ngOnInit() {
   //     this.testGraphQLQuery();
   // }
 
-  // navigateToPage(pageName:string){
-  //   this.navCtrl.push(pageName);
-  // }
+  navigateToPage(pageName:string){
+     this.navCtrl.push(pageName);
+  }
 
     /**
      * Example of calling query with graphql server.
      */
   testGraphQLQuery() {
       console.log("test graphql queury called");
-      this.eventService.queryEvent()
-          .subscribe(data => {
-              console.log("success getting graphql data");
-              console.log(data);
-          }, err => {
-              console.log("error getting graphql data");
-              console.log(err);
-          })
+      this.eventService.queryEvent(1)
+      .subscribe(data => {
+          console.log("success getting graphql data");
+          console.log(data);
+      }, err => {
+          console.log("error getting graphql data");
+          console.log(err);
+      })
   }
 
-  getUsername(){
-
+  setUserName(){
+      this.storage.set('username',this.username)
+          .then(
+              () => console.log('Stored User: ' + this.username)
+          );
   }
 
-  presentToast(){
+  setUserID(userID){
+      this.storage.set('userID', userID)
+          .then(
+              () => console.log('Stored item: ' + userID),
+              error => console.error('Error Storing',error)
+          );
+  }
+  getData(){
+      this.storage.get('userID')
+          .then((data)=>{
+          console.log('get UserID: ' + data);
+      });
+  }
+
+  presentToast(name){
     this.toast.create({
-        message: "Welcome back, " + this.username,
+        message: "Welcome back, " + name,
         duration: 3000
     }).present();
   }
 
+  presentErrorToast(err){
+      this.toast.create({
+          message: err,
+          duration: 3000
+      }).present();
+  }
+
+
   doLogin(){
     this.testGraphQLQuery();
     this.authenticationService.authenticate(this.username, this.password)
-        .subscribe(response => {
-          console.log("success");
-          console.log(response);
-          // Success, so you will get user data back. save them in local storage
-          // Then you can navigate user to home page after this. 
+    .subscribe(response => {
+      /**
+       * Successful login will save userid in local storage to pull data
+       * in database (events,contacts,groups)
+      */
+      console.log("success");
+      this.setUserID(response.id);
+      this.setUserName();
+      this.presentToast(response.firstName);
+      this.getData();
 
-        }, err => {
-          console.log("error occured");
-          // You can console.log(err) to see the entire error object, and get what you need
-          console.log(err);
-          console.log(err.error.message); // This is the error message. do sth about it
-
-          // if err.error.message.contains("no id found or sth") then u know, no id found, display error message to user
-
-
-        });
+      // Navigate to HomePage
+      this.navCtrl.setRoot('HomePage');
+      console.log(response);
 
 
+    }, err => {
+      /** return error */
+      console.log("error occurred");
+      this.presentErrorToast(err.error.message);
+      console.log(err);
+      console.log(err.error.message); // error message.
 
-    // this.navCtrl.setRoot('HomePage');
+      // if err.error.message.contains("no id found or sth") then u know, no id found, display error message to user
+
+
+    });
+
   }
 
 }
