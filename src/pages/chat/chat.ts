@@ -10,6 +10,7 @@ import { AngularFireDatabase } from 'angularfire2/database';
 
 export class ChatPage {
     @ViewChild(Content) content: Content;
+    title: string = '';
     username: string = '';
     message: string = '';
     _chatSubscription;
@@ -19,8 +20,11 @@ export class ChatPage {
                 public navCtrl: NavController,
                 public navParams: NavParams) {
 
-        this.username = this.navParams.get('username');
-        this._chatSubscription = this.db.list('/chat').valueChanges().subscribe( data => {
+        this.title = this.navParams.get('title');       // get title from param
+        this.username = this.navParams.get('username'); // get user name from param
+
+        // Subscribe to the selected chat  @TODO: /branchname in Firebase
+        this._chatSubscription = this.db.list('/' + this.title).valueChanges().subscribe( data => {
             this.messages = data;
             this.autoScroll();
         });
@@ -37,34 +41,34 @@ export class ChatPage {
     }
 
     sendMessage() {
-        this.db.list('/chat').push({
+        this.db.list('/' + this.title).push({
             username: this.username,
             message: this.message
         }).then( () => {
             // message is sent
-        }).catch( () => {
-            // some error. maybe firebase is unreachable
         });
+        //     .catch( () => {
+        //     // some error. maybe firebase is unreachable
+        // });
         this.message = '';
-        console.log('here');
     }
 
     ionViewDidLoad() {
-        this.db.list('/chat').push({
-            specialMessage: true,
-            message: `${this.username} has joined the room`
-        });
+        // this.db.list('/chat').push({
+        //     specialMessage: true,
+        //     message: `${this.username} has joined the room`
+        // });
     }
 
     ionViewDidEnter(){
         this.autoScroll();
     }
 
-    ionViewWillLeave(){
-        this._chatSubscription.unsubscribe();
-        this.db.list('/chat').push({
-            specialMessage: true,
-            message: `${this.username} has left the room`
-        });
-    }
+    // ionViewWillLeave(){
+    //     this._chatSubscription.unsubscribe();
+    //     this.db.list('/chat').push({
+    //         specialMessage: true,
+    //         message: `${this.username} has left the room`
+    //     });
+    // }
 }

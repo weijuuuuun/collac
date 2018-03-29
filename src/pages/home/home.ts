@@ -133,6 +133,7 @@ export class HomePage {
       this.storage.get('username').then((val) => {
           console.log('Your name is', val);
           this.navCtrl.push(ChatPage,{
+              title: 'OneTwoThree',
               username: val
           });
       });
