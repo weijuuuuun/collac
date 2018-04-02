@@ -22,6 +22,17 @@ export class LoginPage {
               private localStorageHelper: LocalStorageHelper) {
   }
 
+  ionViewWillEnter() {
+    this.storage.ready()
+      .then(() => {
+        this.localStorageHelper.getLoggedInUser()
+          .then(user => {
+            if(user) {
+              this.navCtrl.setRoot('HomePage');
+            }
+          });
+      });
+  }
 
   navigateToPage(pageName: string) {
     this.navCtrl.push(pageName);

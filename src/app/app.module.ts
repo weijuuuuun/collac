@@ -22,7 +22,7 @@ import {AngularFireModule} from "angularfire2";
 import {AngularFireDatabaseModule} from "angularfire2/database";
 import {UserService} from "../providers/UserService";
 import {LocalStorageHelper} from "../helpers/LocalStorageHelper";
-import {LoginPage} from "../pages/login/login";
+import {LoginPageModule} from "../pages/login/login.module";
 
 // Firebase config
 var config = {
@@ -38,7 +38,6 @@ var config = {
   declarations: [
     MyApp,
     SideMenuContentComponent,
-    LoginPage,
     GroupPage,
     ContactPage,
     ChatPage
@@ -51,15 +50,15 @@ var config = {
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
     AngularFireModule.initializeApp(config),
-    AngularFireDatabaseModule
+    AngularFireDatabaseModule,
+    LoginPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     GroupPage,
     ContactPage,
-    ChatPage,
-    LoginPage
+    ChatPage
   ],
   providers: [
     StatusBar,
