@@ -10,6 +10,7 @@ import {SideMenuSettings} from "../shared/side-menu-content/models/side-menu-set
 import {HomePage} from "../pages/home/home";
 import {GroupPage} from "../pages/group/group";
 import {ContactPage} from "../pages/contact/contact";
+import {LocalStorageHelper} from "../helpers/LocalStorageHelper";
 
 
 @Component({
@@ -45,7 +46,8 @@ export class MyApp {
               private splashScreen: SplashScreen,
               private alertCtrl: AlertController,
               private menuCtrl: MenuController,
-              private toast: ToastController) {
+              private toast: ToastController,
+              private localStroageHelper: LocalStorageHelper) {
       this.initializeApp();
   }
 
@@ -207,7 +209,16 @@ export class MyApp {
 }
 
   public doLogout(){
-      this.navCtrl.setRoot('LoginPage');
+    this.localStroageHelper.clearLocalStorage()
+      .then(() => {
+        console.log("app.component.ts: successfully cleared local storage");
+        this.navCtrl.setRoot('LoginPage');
+
+      }, err => {
+        console.log("app.component.ts: Error clearning local storage");
+        console.log(err);
+      })
+
   }
 }
 
