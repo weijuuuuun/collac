@@ -1,8 +1,9 @@
 import {Injectable} from "@angular/core";
 import {Credential} from "../models/Credential";
-import {HttpClient, HttpResponse} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {backendUrl} from "../Configurations";
 import {User} from "../models/User";
+import {Observable} from "rxjs/Observable";
 
 @Injectable()
 export class AuthenticationService {
@@ -20,7 +21,7 @@ export class AuthenticationService {
      * Method to authenticate user against the backend
      * When success, will return the user details from backend.
      */
-    public authenticate(email:string, password:string) {
+    public authenticate(email:string, password:string): Observable<User> {
 
         let credential: Credential = {
             email,

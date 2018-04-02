@@ -21,6 +21,7 @@ import {ChatPage} from "../pages/chat/chat";
 import {AngularFireModule} from "angularfire2";
 import {AngularFireDatabaseModule} from "angularfire2/database";
 import {UserService} from "../providers/UserService";
+import {LocalStorageHelper} from "../helpers/LocalStorageHelper";
 
 // Firebase config
 var config = {
@@ -64,7 +65,8 @@ var config = {
     DataProvider,
     AuthenticationService,
     EventService,
-    UserService
+    UserService,
+    LocalStorageHelper
   ]
 })
 export class AppModule {

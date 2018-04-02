@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import {AlertController, IonicPage, ModalController, NavController, NavParams} from 'ionic-angular';
 import * as moment from "moment";
 import {ChatPage} from "../chat/chat";
-import {LoginPage} from "../login/login";
 import {Storage} from "@ionic/storage";
 
 
