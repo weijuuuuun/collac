@@ -3,6 +3,7 @@ import {IonicPage, NavController, ToastController} from 'ionic-angular';
 import {User} from "../../models/User";
 import {UserService} from "../../providers/UserService";
 import {Credential} from "../../models/Credential";
+import {LoginPage} from "../login/login";
 
 
 
@@ -12,19 +13,22 @@ import {Credential} from "../../models/Credential";
   templateUrl: 'register.html',
 })
 export class RegisterPage {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
+
+  newUser: User = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    credential: {
+      password: ""
+    }
+  };
+
 
   constructor(private navCtrl: NavController,
               private userService: UserService,
               private toast: ToastController) {
   }
 
-  popPage(){
-      this.navCtrl.pop();
-  }
 
   presentErrorToast(){
       this.toast.create({
@@ -33,9 +37,16 @@ export class RegisterPage {
       }).present();
   }
 
+  presentSuccessToast() {
+    this.toast.create({
+      message: "Registration success.",
+      duration: 3000
+    }).present();
+  }
+
   validate(){
-      if(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.email)){
-          if(/^[a-zA-Z0-9]+$/.test(this.firstName) && /^[a-zA-Z0-9]+$/.test(this.lastName)){
+      if(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.newUser.email)){
+          if(/^[a-zA-Z0-9]+$/.test(this.newUser.firstName) && /^[a-zA-Z0-9]+$/.test(this.newUser.lastName)){
             return true;
           }
       }
@@ -44,28 +55,20 @@ export class RegisterPage {
   }
 
   onRegister() {
-      // call this method on clicking submit button
-      // validate form value
-      if(this.validate()){
-          let firstName = this.firstName;
-          let lastName = this.lastName;
-          let email = this.email;
-          let password = this.password;
 
-          let credential: Credential = {
-              email,
-              password
-          }
+    if(!this.validate()) {
+      return;
+    }
 
-          // create user object
-          let newUser: User = {
-              firstName,
-              lastName,
-              email,
-              credential
-          }
-          this.userService.createUser(newUser)
-          this.popPage();
-      }
+    this.userService.createUser(this.newUser)
+      .subscribe(newUserId => {
+        console.log("register.ts: Success user registration. ID: " + newUserId);
+        this.presentSuccessToast();
+        this.navCtrl.setRoot(LoginPage);
+      },
+      err => {
+        console.log("register.ts: Failed user registration. ");
+        console.log(err.error.code + ": " + err.error.message);
+      })
   }
 }

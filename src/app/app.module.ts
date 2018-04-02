@@ -22,6 +22,7 @@ import {AngularFireModule} from "angularfire2";
 import {AngularFireDatabaseModule} from "angularfire2/database";
 import {UserService} from "../providers/UserService";
 import {LocalStorageHelper} from "../helpers/LocalStorageHelper";
+import {LoginPage} from "../pages/login/login";
 
 // Firebase config
 var config = {
@@ -37,6 +38,7 @@ var config = {
   declarations: [
     MyApp,
     SideMenuContentComponent,
+    LoginPage,
     GroupPage,
     ContactPage,
     ChatPage
@@ -56,7 +58,8 @@ var config = {
     MyApp,
     GroupPage,
     ContactPage,
-    ChatPage
+    ChatPage,
+    LoginPage
   ],
   providers: [
     StatusBar,

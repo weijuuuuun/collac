@@ -3,7 +3,6 @@ import {IonicPage, NavController, ToastController} from 'ionic-angular';
 import {AuthenticationService} from "../../providers/AuthenticationService";
 import {EventService} from "../../providers/EventService";
 import {Storage} from "@ionic/storage";
-import {User} from "../../models/User";
 import {LocalStorageHelper} from "../../helpers/LocalStorageHelper";
 
 @IonicPage()

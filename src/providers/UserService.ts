@@ -2,6 +2,7 @@ import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {backendUrl} from "../Configurations";
 import {User} from "../models/User";
+import {Observable} from "rxjs/Observable";
 
 @Injectable()
 export class UserService {
@@ -19,11 +20,8 @@ export class UserService {
      * Method to create user against the backend
      * When success, will return the user details from backend.
      */
-    public createUser(user: User) {
-
-        console.log("Called " + backendUrl);
-
-        return this.http.post<User>(`http://localhost:9001/users`, user);
+    public createUser(user: User): Observable<number> {
+        return this.http.post<number>(`http://localhost:9001/users`, user);
     }
 
 }
