@@ -4,6 +4,7 @@ import {AuthenticationService} from "../../providers/AuthenticationService";
 import {EventService} from "../../providers/EventService";
 import {Storage} from "@ionic/storage";
 import {LocalStorageHelper} from "../../helpers/LocalStorageHelper";
+import {UserService} from "../../providers/UserService";
 
 @IonicPage()
 @Component({
@@ -19,7 +20,8 @@ export class LoginPage {
               private authenticationService: AuthenticationService,
               private eventService: EventService,
               private storage: Storage,
-              private localStorageHelper: LocalStorageHelper) {
+              private localStorageHelper: LocalStorageHelper,
+              private userService: UserService) {
   }
 
   ionViewWillEnter() {
@@ -27,6 +29,8 @@ export class LoginPage {
       .then(user => {
         if(user) {
           console.log("login.ts: User is already logged in");
+          this.userService.populateCachedEvents(user.id);
+          this.userService.populateCachedTasks(user.id);
           this.navCtrl.setRoot('HomePage');
         }
 
@@ -35,21 +39,6 @@ export class LoginPage {
 
   navigateToPage(pageName: string) {
     this.navCtrl.push(pageName);
-  }
-
-  /**
-   * Example of calling query with graphql server.
-   */
-  testGraphQLQuery() {
-    console.log("test graphql queury called");
-    this.eventService.queryEvent(1)
-      .subscribe(data => {
-        console.log("success getting graphql data");
-        console.log(data);
-      }, err => {
-        console.log("error getting graphql data");
-        console.log(err);
-      })
   }
 
   setUserName() {
@@ -95,6 +84,7 @@ export class LoginPage {
         this.localStorageHelper.setLoggedInUser(loggedInUser)
           .then(() => {
             console.log("Login.ts: Successfully store logged in user details");
+            this.userService.populateCachedEvents(loggedInUser.id);
             this.presentSuccessToast(loggedInUser.firstName);
             this.navCtrl.setRoot('HomePage');
           });

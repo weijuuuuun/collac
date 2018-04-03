@@ -11,6 +11,9 @@ import {HomePage} from "../pages/home/home";
 import {GroupPage} from "../pages/group/group";
 import {ContactPage} from "../pages/contact/contact";
 import {LocalStorageHelper} from "../helpers/LocalStorageHelper";
+import {UserService} from "../providers/UserService";
+import {Event} from "../models/Event";
+import {Task} from "../models/Task";
 
 
 @Component({
@@ -18,6 +21,8 @@ import {LocalStorageHelper} from "../helpers/LocalStorageHelper";
 })
 export class MyApp {
   rootPage:string = 'LoginPage';
+  cachedUserEvents: Event[] = [];
+  cachedUserTasks: Task[] = [];
 
   @ViewChild(Nav) navCtrl: Nav;
 
@@ -47,7 +52,8 @@ export class MyApp {
               private alertCtrl: AlertController,
               private menuCtrl: MenuController,
               private toast: ToastController,
-              private localStroageHelper: LocalStorageHelper) {
+              private localStorageHelper: LocalStorageHelper,
+              private userService: UserService) {
       this.initializeApp();
   }
 
@@ -55,6 +61,9 @@ export class MyApp {
       this.platform.ready().then(() => {
           this.statusBar.styleLightContent();
           this.splashScreen.hide();
+
+          this.initializeUserEvents();
+          this.initializeUserTasks();
 
           // Initialize some options
           this.initializeOptions();
@@ -64,6 +73,25 @@ export class MyApp {
       setInterval(() => {
           this.unreadCountObservable.next(Math.floor(Math.random() * 10));
       }, 5000);
+  }
+
+  private initializeUserEvents(): void {
+    this.userService.userEvents
+      .subscribe(events => {
+        console.log("Called initialize event subscribe");
+
+        this.cachedUserEvents = events;
+        this.initializeUserTasks();
+        this.initializeOptions();
+        console.log(this.cachedUserEvents);
+      })
+  }
+
+  private initializeUserTasks(): void {
+    this.userService.userTasks
+      .subscribe(tasks => {
+        this.cachedUserTasks = tasks;
+      })
   }
 
   private initializeOptions(): void {
@@ -81,67 +109,36 @@ export class MyApp {
 
       // Load options with nested items
       //-------------------------------------------
-      this.options.push({
-          displayName: 'Topics',
-          subItems: [
-              {
-                  iconName:'fa fa-hashtag',
-                  displayName: 'TestingOne',
-                  component: HomePage
-              },
-              {
-                  iconName:'fa fa-hashtag',
-                  displayName: 'TestingTwo',
-                  component: HomePage,
-                  badge: this.unreadCountObservable //currently random
-              },
-              {
-                  iconName:'fa fa-hashtag',
-                  displayName: 'TestingThree',
-                  component: HomePage,
-                  badge: this.unreadCountObservable //currently random
-              },
-              {
-                  iconName:'fa fa-hashtag',
-                  displayName: 'TestingFour',
-                  component: HomePage
-              },
-              {
-                  iconName:'fa fa-hashtag',
-                  displayName: 'TestingFive',
-                  component: HomePage,
-                  badge: this.unreadCountObservable //currently random
-              },
-              {
-                  iconName:'fa fa-hashtag',
-                  displayName: 'TestingSix',
-                  component: HomePage
-              },
-              {
-                  iconName:'fa fa-hashtag',
-                  displayName: 'TestingSeven',
-                  component: HomePage
-              }
 
-          ]
+      let eventOptionItems = this.cachedUserEvents.map(cachedEvent => {
+        return {
+          iconName: 'fa fa-hashtag',
+          displayName: cachedEvent.title,
+          component: HomePage,
+          itemId: cachedEvent.id,
+          badge: this.unreadCountObservable //currently random
+        };
       });
+
+
+      this.options.push({
+          displayName: 'Events',
+          subItems: eventOptionItems
+      });
+
+
+    let taskOptionItems = this.cachedUserTasks.map(cachedTask => {
+      return {
+        iconName: 'fa fa-hashtag',
+        displayName: cachedTask.title,
+        component: HomePage,
+        itemId: cachedTask.id
+      };
+      
+    });
       this.options.push({
           displayName: 'Task',
-          subItems: [
-              {
-                  displayName: 'TaskOneTwoThree',
-                  component: HomePage
-              },
-              {
-                  displayName: 'TaskThreeFourFive',
-                  component: HomePage
-              },
-              {
-                  displayName: 'TaskSixSevenEight',
-                  component: HomePage,
-                  badge: this.unreadCountObservable
-              }
-          ]
+          subItems: taskOptionItems
 
       });
 
@@ -209,9 +206,10 @@ export class MyApp {
 }
 
   public doLogout(){
-    this.localStroageHelper.clearLocalStorage()
+    this.localStorageHelper.clearLocalStorage()
       .then(() => {
         console.log("app.component.ts: successfully cleared local storage");
+        this.userService.clearCachedEvents();
         this.navCtrl.setRoot('LoginPage');
 
       }, err => {

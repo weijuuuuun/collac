@@ -3,6 +3,7 @@ import {AlertController, IonicPage, ModalController, NavController, NavParams} f
 import * as moment from "moment";
 import {ChatPage} from "../chat/chat";
 import {Storage} from "@ionic/storage";
+import {UserService} from "../../providers/UserService";
 
 
 @IonicPage()
@@ -25,8 +26,10 @@ export class HomePage {
               public navParams: NavParams,
               public  storage: Storage,
               private modalCtrl: ModalController,
-              private alertCtrl: AlertController) {
+              private alertCtrl: AlertController,
+              private userService: UserService) {
   }
+
 
   addEvent(){
     let modal = this.modalCtrl.create('EventModalPage',{selectedDay: this.selectedDay});
@@ -51,7 +54,7 @@ export class HomePage {
     });
   }
 
-  ionViewWilload() {
+  ionViewWillEnter() {
       // when the page will load, this method is called
       // call the backend, to retrieve data on events
       // get the data, display in html
@@ -142,9 +145,6 @@ export class HomePage {
       // });
   }
 
-  ionViewWillEnter(){
-      //this.eventSource = this.loadRandomEvents();
-  }
 }
 
 
