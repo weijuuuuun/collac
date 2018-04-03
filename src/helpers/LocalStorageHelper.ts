@@ -14,14 +14,18 @@ export class LocalStorageHelper {
   }
 
   public getLoggedInUser(): Promise<User> {
-    return this.storage.get('loggedInUser')
-      .then(loggedInUser => {
-        if(loggedInUser === null) {
-          console.log("LocalStorageHelper: loggedInUser is null in Local Storage");
-          return null;
-        }
-        return loggedInUser;
-    });
+    return this.storage.ready()
+      .then(() => {
+        return this.storage.get('loggedInUser')
+          .then(loggedInUser => {
+            if(loggedInUser === null) {
+              console.log("LocalStorageHelper: loggedInUser is null in Local Storage");
+              return null;
+            }
+            return loggedInUser;
+          });
+      })
+
   }
 
   public clearLocalStorage(): Promise<any> {

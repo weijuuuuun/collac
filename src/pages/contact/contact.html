@@ -15,7 +15,7 @@
     <button ion-item clear
             *ngFor="let contactList of contactLists"
             (click)="contactSelected(contactList)">
-      {{contactList.name}}
+      {{contactList.firstName}} {{contactList.lastName}}
     </button>
   </ion-list>
 </ion-content>

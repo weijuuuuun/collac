@@ -23,14 +23,13 @@ export class LoginPage {
   }
 
   ionViewWillEnter() {
-    this.storage.ready()
-      .then(() => {
-        this.localStorageHelper.getLoggedInUser()
-          .then(user => {
-            if(user) {
-              this.navCtrl.setRoot('HomePage');
-            }
-          });
+    this.localStorageHelper.getLoggedInUser()
+      .then(user => {
+        if(user) {
+          console.log("login.ts: User is already logged in");
+          this.navCtrl.setRoot('HomePage');
+        }
+
       });
   }
 

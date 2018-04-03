@@ -215,7 +215,7 @@ export class MyApp {
         this.navCtrl.setRoot('LoginPage');
 
       }, err => {
-        console.log("app.component.ts: Error clearning local storage");
+        console.log("app.component.ts: Error cleaning local storage");
         console.log(err);
       })
 
