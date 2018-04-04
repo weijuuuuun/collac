@@ -68,7 +68,9 @@ export class UserService {
                     user(id: ${userId}) {
                     eventsOwned{
                         id,
-                        title
+                        title,
+                        due,
+                        description
                     }
                   }
                 }
@@ -90,7 +92,9 @@ export class UserService {
                     user(id: ${userId}) {
                     eventsJoined{
                         id,
-                        title
+                        title,
+                        due,
+                        description
                     }
                   }
                 }

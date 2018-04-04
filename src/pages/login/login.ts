@@ -48,14 +48,6 @@ export class LoginPage {
       );
   }
 
-  setUserID(userID) {
-    this.storage.set('userID', userID)
-      .then(
-        () => console.log('Stored item: ' + userID),
-        error => console.error('Error Storing', error)
-      );
-  }
-
   getData() {
     this.storage.get('userID')
       .then((data) => {

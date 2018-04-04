@@ -23,6 +23,7 @@ import {AngularFireDatabaseModule} from "angularfire2/database";
 import {UserService} from "../providers/UserService";
 import {LocalStorageHelper} from "../helpers/LocalStorageHelper";
 import {LoginPageModule} from "../pages/login/login.module";
+import {EventPage} from "../pages/event/event";
 // Firebase config
 var config = {
     apiKey: "AIzaSyAIrkjicK4M9CWrRfEYIz32h2snBNxQD2s",
@@ -39,7 +40,8 @@ var config = {
     SideMenuContentComponent,
     GroupPage,
     ContactPage,
-    ChatPage
+    ChatPage,
+    EventPage
   ],
   imports: [
     BrowserModule,
@@ -57,7 +59,8 @@ var config = {
     MyApp,
     GroupPage,
     ContactPage,
-    ChatPage
+    ChatPage,
+    EventPage
   ],
   providers: [
     StatusBar,

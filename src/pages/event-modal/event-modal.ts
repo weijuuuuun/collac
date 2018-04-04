@@ -24,11 +24,11 @@ export class EventModalPage {
         let preselectedDate = new Date(this.navParams.get('selectedDay'));
         preselectedDate.setHours(8);                    // make 8am as default start time
         let selected = moment(preselectedDate).format();
-        this.event.startTime = selected;
+        this.event.endTime = selected;
 
-        let addOneHour = preselectedDate.setHours(9);   // make 9am as default end time
-        let selectedAdded = moment(addOneHour).format();
-        this.event.endTime = selectedAdded;
+        // let addOneHour = preselectedDate.setHours(9);   // make 9am as default end time
+        // let selectedAdded = moment(addOneHour).format();
+        // this.event.endTime = selectedAdded;
     }
 
     save(){

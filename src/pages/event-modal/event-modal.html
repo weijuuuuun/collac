@@ -10,20 +10,20 @@
       <ion-input placeholder="Title" [(ngModel)]="event.title"></ion-input>
     </ion-item>
 
-    <ion-item>
-      <ion-label>Start</ion-label>
-      <ion-datetime type="text"
-                    placeholder="DDD, DD MMM, YYYY h:mm A"
-                    pickerFormat="DDD, DD MMM, YYYY h:mm A"
-                    [(ngModel)]="event.startTime">
-      </ion-datetime>
-    </ion-item>
+    <!--<ion-item>-->
+      <!--<ion-label>Start</ion-label>-->
+      <!--<ion-datetime type="text"-->
+                    <!--placeholder="DDD, DD MMM, YYYY h:mm A"-->
+                    <!--pickerFormat="DDD, DD MMM, YYYY h:mm A"-->
+                    <!--[(ngModel)]="event.startTime">-->
+      <!--</ion-datetime>-->
+    <!--</ion-item>-->
 
     <ion-item>
-      <ion-label>End</ion-label>
+      <ion-label>Due</ion-label>
       <ion-datetime type="text"
                     placeholder="DDD, DD MMM, YYYY h:mm A"
-                    pickerFormat="DDD, DD MMM, YYYY h:mm A"
+                    pickerFormat="DDD, DD MMM h:mm A"
                     [(ngModel)]="event.endTime">
       </ion-datetime>
     </ion-item>

@@ -1,6 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import {Content, NavController, NavParams} from 'ionic-angular';
 import { AngularFireDatabase } from 'angularfire2/database';
+import {User} from "../../models/User";
+import {LocalStorageHelper} from "../../helpers/LocalStorageHelper";
 
 //@IonicPage()
 @Component({
@@ -11,20 +13,25 @@ import { AngularFireDatabase } from 'angularfire2/database';
 export class ChatPage {
     @ViewChild(Content) content: Content;
     title: string = '';
+    eventId: string = '';
     username: string = '';
+    firstName: string = '';
     message: string = '';
     _chatSubscription;
     messages: object[] = [];
+    loggedInUser: User;
 
     constructor(public db: AngularFireDatabase,
                 public navCtrl: NavController,
-                public navParams: NavParams) {
+                public navParams: NavParams,
+                private localStorageHelper: LocalStorageHelper) {
 
         this.title = this.navParams.get('title');       // get title from param
-        this.username = this.navParams.get('username'); // get user name from param
+        this.eventId = this.navParams.get('id');
+
 
         // Subscribe to the selected chat  @TODO: /branchname in Firebase
-        this._chatSubscription = this.db.list('/' + this.title).valueChanges().subscribe( data => {
+        this._chatSubscription = this.db.list('/eventid' + this.eventId).valueChanges().subscribe( data => {
             this.messages = data;
             this.autoScroll();
         });
@@ -41,7 +48,7 @@ export class ChatPage {
     }
 
     sendMessage() {
-        this.db.list('/' + this.title).push({
+        this.db.list('/eventid' + this.eventId).push({
             username: this.username,
             message: this.message
         }).then( () => {
@@ -62,6 +69,18 @@ export class ChatPage {
 
     ionViewDidEnter(){
         this.autoScroll();
+    }
+
+    ionViewWillEnter(){
+        this.localStorageHelper.getLoggedInUser()
+            .then(user=>{
+                if(!user){
+                    console.log("chat.ts: No logged in user data")
+                }
+                this.loggedInUser = user;
+                this.username = this.loggedInUser.email;
+                this.firstName = this.loggedInUser.firstName;
+            });
     }
 
     // ionViewWillLeave(){

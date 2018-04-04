@@ -40,8 +40,8 @@ export class HomePage {
         if(data){
             let eventData = data;
 
-            eventData.startTime = new Date(data.startTime);
             eventData.endTime = new Date(data.endTime);
+            eventData.startTime = eventData.endTime;
 
             // assign current eventSource to new event
             let events = this.eventSource;
@@ -58,6 +58,7 @@ export class HomePage {
       // when the page will load, this method is called
       // call the backend, to retrieve data on events
       // get the data, display in html
+
   }
 
   // Display Month
@@ -77,12 +78,11 @@ export class HomePage {
       console.log("Noti: " + event.notification);
       console.log("Group: " + event.group);
       */
-      let start = moment(event.startTime).format('llll');
       let end = moment(event.endTime).format('llll');
 
       let alert = this.alertCtrl.create({
           title: '' + event.title,
-          subTitle: 'From: ' + start + '<br>To: ' + end + '<br>With: ' + event.group,
+          subTitle: 'Due: ' +  end + '<br>With: ' + event.group,
           buttons: [
               {
                   text: 'Cancel',
@@ -132,13 +132,10 @@ export class HomePage {
 
   launchChat(){
 
-      this.storage.get('username').then((val) => {
-          console.log('Your name is', val);
-          this.navCtrl.push(ChatPage,{
-              title: 'OneTwoThree',
-              username: val
-          });
+      this.navCtrl.push(ChatPage,{
+          title: 'OneTwoThree'
       });
+
 
       // this.navCtrl.push(ChatPage,{
       //     username: this.storage.get('username');

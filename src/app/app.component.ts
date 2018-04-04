@@ -14,6 +14,8 @@ import {LocalStorageHelper} from "../helpers/LocalStorageHelper";
 import {UserService} from "../providers/UserService";
 import {Event} from "../models/Event";
 import {Task} from "../models/Task";
+import {EventPage} from "../pages/event/event";
+import {promisify} from "util";
 
 
 @Component({
@@ -116,12 +118,16 @@ export class MyApp {
         return {
           iconName: 'fa fa-hashtag',
           displayName: cachedEvent.title,
-          component: HomePage,
           itemId: cachedEvent.id,
-          badge: this.unreadCountObservable //currently random
+          custom: {
+              isEvent: true,
+              itemId: cachedEvent.id,
+              itemName: cachedEvent.title,
+              event: cachedEvent
+          }
+          //badge: this.unreadCountObservable //currently random
         };
       });
-
 
       this.options.push({
           displayName: 'Events',
@@ -179,7 +185,18 @@ export class MyApp {
           //     // Redirect to the selected page
           //     this.navCtrl.setRoot(option.component || HomePage, { 'title': option.displayName });
           // }
-          this.navCtrl.setRoot(option.component || HomePage, { 'title': option.displayName });
+          if(option.custom && option.custom.isEvent){
+              //this.presentAlert('You\'ve clicked the event: ' + option.custom.itemName);
+              this.navCtrl.push(EventPage,{
+                  itemId: option.custom.event.id,
+                  itemTitle: option.custom.event.title,
+                  itemDue: option.custom.event.due,
+                  itemNotes: option.custom.event.description
+              });
+          } else {
+              this.navCtrl.setRoot(option.component || HomePage, { 'title': option.displayName });
+          }
+
       });
   }
 
