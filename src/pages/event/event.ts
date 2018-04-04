@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import * as moment from "moment";
 import {ChatPage} from "../chat/chat";
-
+import {EventService} from "../../providers/EventService";
+import {User} from "../../models/User";
 
 @IonicPage()
 @Component({
@@ -14,10 +15,12 @@ export class EventPage {
   title: string;
   startTime: string;
   endTime: string;
-  members = [];
   notes: string;
+  memberList:any
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController,
+              public navParams: NavParams,
+              private eventService: EventService) {
     this.id = this.navParams.get("itemId");
     this.title = this.navParams.get("itemTitle");
     // this.endTime = moment(new Date()).format('lll');
@@ -33,8 +36,15 @@ export class EventPage {
       });
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad EventPage');
+  ionViewWillEnter() {
+     this.eventService.getEventMembers(this.id)
+         .subscribe(eventData => {
+             console.log("event.ts: Received event data.");
+             this.memberList = eventData;
+             console.log(this.memberList);
+         }, err => {
+             console.log("event.ts: Error getting event data.");
+             console.log(err);
+         });
   }
-
 }

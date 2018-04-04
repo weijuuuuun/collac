@@ -49,5 +49,53 @@ export class EventService {
             );
     }
 
+    public getEventMembers(eventID: number) {
+        return this.apollo.watchQuery<any>({
+            query: gql`
+                query {
+                    event(id: ${eventID}) {
+                    id,
+                    title,
+                    members{
+                        id,
+                        firstName,
+                        lastName
+                    }
+                  }
+                }
+            `,
+            variables: {
+                eventId: eventID
+            }
+        })
+            .valueChanges
+            .pipe(
+                map(result => {
+                    return result.data.event.members;
+                })
+            );
+    }
+    // public getEventOwner(eventID: number) {
+    //     return this.apollo.watchQuery<any>({
+    //         query: gql`
+    //             query {
+    //                 event(id: ${eventID}){
+    //                     owner
+    //                 }
+    //             }
+    //         `,
+    //         variables: {
+    //             eventId: eventID
+    //         }
+    //     })
+    //         .valueChanges
+    //         .pipe(
+    //             map(result => {
+    //                 return result.data.event.owner;
+    //             })
+    //         );
+    // }
+
+
 
 }

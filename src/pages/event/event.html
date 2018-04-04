@@ -28,10 +28,8 @@
 
     <ion-list>
         <ion-list-header>Members</ion-list-header>
-        <ion-item>
-            <ion-label>
-                Item Label
-            </ion-label>
+        <ion-item  *ngFor="let member of memberList">
+            <ion-label>{{member.firstName}} {{member.lastName}}</ion-label>
         </ion-item>
      </ion-list>
 
