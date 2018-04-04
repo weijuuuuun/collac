@@ -12,14 +12,13 @@ export class EventPage {
   title: string;
   startTime: string;
   endTime: string;
-  members: string;
+  members = [];
   notes: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.title = "title";
     this.startTime = moment(new Date()).format('lll');
     this.endTime = moment(new Date()).format('lll');
-    this.groupName = "group one"
     this.notes = "desc"
   }
 

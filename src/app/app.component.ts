@@ -57,6 +57,8 @@ export class MyApp {
       this.initializeApp();
   }
 
+
+  // subscribes and gets updates
   initializeApp() {
       this.platform.ready().then(() => {
           this.statusBar.styleLightContent();
