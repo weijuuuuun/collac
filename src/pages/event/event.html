@@ -1,0 +1,49 @@
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>Event Details</ion-title>
+    <button ion-button small item-end>Cancel</button>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content class="masters">
+    <ion-list class="list" no-border>
+        <ion-item>
+            <ion-label>Title</ion-label>
+            <ion-label align="right">{{title}}</ion-label>
+        </ion-item>
+
+        <ion-item>
+            <ion-label>Start</ion-label>
+            <ion-label align="right" class="lblSmall">{{startTime}}</ion-label>
+        </ion-item>
+
+        <ion-item>
+            <ion-label>End</ion-label>
+            <ion-label align="right" class="lblSmall">{{endTime}}</ion-label>
+        </ion-item>
+
+        <ion-item>
+            <ion-label>Notes</ion-label>
+            <ion-label align="right">{{notes}}</ion-label>
+        </ion-item>
+    </ion-list>
+
+    <ion-list>
+        <ion-list-header>Members</ion-list-header>
+        <ion-item>
+            <ion-label>
+                Item Label
+            </ion-label>
+        </ion-item>
+     </ion-list>
+
+
+
+
+    <ion-row padding-horizontal class="loginBtn">
+        <button ion-button default block color="brighter">Open Messenger</button>
+    </ion-row>
+</ion-content>

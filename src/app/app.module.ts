@@ -23,7 +23,6 @@ import {AngularFireDatabaseModule} from "angularfire2/database";
 import {UserService} from "../providers/UserService";
 import {LocalStorageHelper} from "../helpers/LocalStorageHelper";
 import {LoginPageModule} from "../pages/login/login.module";
-
 // Firebase config
 var config = {
     apiKey: "AIzaSyAIrkjicK4M9CWrRfEYIz32h2snBNxQD2s",

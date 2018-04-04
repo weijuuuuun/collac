@@ -198,6 +198,9 @@ export class MyApp {
       this.navCtrl.push(pageName);
   }
 
+  /**
+    Present toast to let user know that they've logged out successfully.
+   */
   public presentToast(){
     this.toast.create({
       message: "Logged Out",
@@ -205,6 +208,9 @@ export class MyApp {
   }).present();
 }
 
+  /**
+    Upon logout, clear Local storage that stores user information
+   */
   public doLogout(){
     this.localStorageHelper.clearLocalStorage()
       .then(() => {
