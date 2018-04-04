@@ -42,6 +42,7 @@ export class HomePage {
 
             eventData.endTime = new Date(data.endTime);
             eventData.startTime = eventData.endTime;
+            console.log(eventData.member);
 
             // assign current eventSource to new event
             let events = this.eventSource;
@@ -133,7 +134,7 @@ export class HomePage {
   launchChat(){
 
       this.navCtrl.push(ChatPage,{
-          title: 'OneTwoThree'
+          title: 'Announcement'
       });
 
 

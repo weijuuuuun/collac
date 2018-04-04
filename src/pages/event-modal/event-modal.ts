@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import {IonicPage, NavController, NavParams, ViewController} from 'ionic-angular';
 import * as moment from "moment";
-
+import {UserService} from "../../providers/UserService";
+import {LocalStorageHelper} from "../../helpers/LocalStorageHelper";
+import {User} from "../../models/User";
 
 @IonicPage()
 @Component({
@@ -15,20 +17,43 @@ export class EventModalPage {
         endTime: new Date().toISOString(),
         allDay: false
     }
-
     minDate = new Date().toISOString();
 
+    memberList:any;
+    loggedInUser: User;
 
-    constructor(public navCtrl: NavController, public navParams: NavParams, private viewCtrl: ViewController) {
+    constructor(public navCtrl: NavController,
+                public navParams: NavParams,
+                private viewCtrl: ViewController,
+                private userService: UserService,
+                private  localStorageHelper: LocalStorageHelper) {
 
         let preselectedDate = new Date(this.navParams.get('selectedDay'));
         preselectedDate.setHours(8);                    // make 8am as default start time
         let selected = moment(preselectedDate).format();
         this.event.endTime = selected;
-
         // let addOneHour = preselectedDate.setHours(9);   // make 9am as default end time
         // let selectedAdded = moment(addOneHour).format();
         // this.event.endTime = selectedAdded;
+    }
+
+    ionViewWillEnter(){
+        this.localStorageHelper.getLoggedInUser()
+            .then(user=>{
+                if(!user){
+                    console.log("event-modal.ts: No logged in user data");
+                }
+                this.loggedInUser = user;
+                this.userService.getFriends(this.loggedInUser.id)
+                    .subscribe(friendsData => {
+                        console.log("event-modal.ts: Received friends data.");
+                        console.log(friendsData);
+                        this.memberList = friendsData;
+                    }, err => {
+                        console.log("event-modal.ts: Error getting friends data");
+                        console.log(err);
+                    })
+            });
     }
 
     save(){

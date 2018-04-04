@@ -10,15 +10,6 @@
       <ion-input placeholder="Title" [(ngModel)]="event.title"></ion-input>
     </ion-item>
 
-    <!--<ion-item>-->
-      <!--<ion-label>Start</ion-label>-->
-      <!--<ion-datetime type="text"-->
-                    <!--placeholder="DDD, DD MMM, YYYY h:mm A"-->
-                    <!--pickerFormat="DDD, DD MMM, YYYY h:mm A"-->
-                    <!--[(ngModel)]="event.startTime">-->
-      <!--</ion-datetime>-->
-    <!--</ion-item>-->
-
     <ion-item>
       <ion-label>Due</ion-label>
       <ion-datetime type="text"
@@ -40,23 +31,12 @@
     </ion-item>
 
     <ion-item>
-      <ion-label>Select Group</ion-label>
-      <ion-select [(ngModel)]="event.group" okText="Okay" cancelText="Dismiss">
-        <ion-option value="1">GroupOne</ion-option>
-        <ion-option value="2">GroupTwo</ion-option>
-        <ion-option value="3">GroupThree</ion-option>
-        <ion-option value="4">GroupFour</ion-option>
+      <ion-label>Select Member</ion-label>
+      <ion-select [(ngModel)]="event.member" okText="Okay" multiple="true" cancelText="Dismiss">
+        <ion-option *ngFor="let member of memberList" [value]="member.id">{{member.firstName}} {{member.lastName}}</ion-option>
       </ion-select>
     </ion-item>
 
-    <ion-item>
-      <ion-label>Repeat</ion-label>
-      <ion-select [(ngModel)]="event.repeat" interface="action-sheet">
-        <ion-option value="1">Daily</ion-option>
-        <ion-option value="2">Weekly</ion-option>
-        <ion-option value="3">Monthly</ion-option>
-      </ion-select>
-    </ion-item>
   </ion-list>
 
 </ion-content>
