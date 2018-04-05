@@ -58,22 +58,27 @@ export class HomePage {
     });
   }
 
-  ionViewWillEnter() {
+  ionViewDidEnter() {
   /**
    *  Upon page called, this method will be initiated
    *  It will reach the backend to retrieve data on events
    */
-  console.log("will enter");
+    console.log("did enter");
+    console.log("initializing...");
     this.initializeUserEvents();
   }
 
   initializeUserEvents(){
-      console.log("initialize");
+      console.log("did initialize");
       this.userService.userEvents
           .subscribe(events => {
               this.cachedUserEvents = events;
+              console.log(events);
               this.loadEvents();
-          })
+          },err => {
+              console.log("Error getting events");
+              console.log(err);
+          });
   }
 
   loadEvents(){
@@ -88,7 +93,9 @@ export class HomePage {
           };
       });
       console.log(eventItems);
-      this.eventSource = eventItems;
+      if(eventItems){
+          this.eventSource = eventItems;
+      }
       console.log("loaded")
   }
 
