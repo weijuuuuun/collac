@@ -74,6 +74,8 @@ export class EventService {
     }
 
     public getEventOwner(eventID: number) {
+        console.log("calling get owner")
+        console.log(eventID)
         return this.apollo.watchQuery<any>({
             query: gql`
                 query {

@@ -49,9 +49,12 @@ export class EventPage {
          });
      this.eventService.getEventOwner(this.id)
          .subscribe(ownerData => {
+             console.log("events.ts: retrieved owner data.");
+             console.log(ownerData)
               this.owner = ownerData;
               console.log(this.owner);
           }, err => {
+             console.log("event.ts: error getting owner data");
               console.log(err);
           });
 

@@ -4,6 +4,7 @@ import * as moment from "moment";
 import {ChatPage} from "../chat/chat";
 import {Storage} from "@ionic/storage";
 import {UserService} from "../../providers/UserService";
+import {Event} from "../../models/Event";
 
 
 @IonicPage()
@@ -13,6 +14,7 @@ import {UserService} from "../../providers/UserService";
 })
 export class HomePage {
   eventSource = [];
+  cachedUserEvents: Event[] = [];
   viewTitle: string;
   selectedDay = new Date();
   username: string;
@@ -56,10 +58,31 @@ export class HomePage {
   }
 
   ionViewWillEnter() {
-      // when the page will load, this method is called
-      // call the backend, to retrieve data on events
-      // get the data, display in html
+  /**
+   *  Upon page called, this method will be initiated
+   *  It will reach the backend to retrieve data on events
+   */
+    this.initializeUserEvents();
+  }
 
+  initializeUserEvents(){
+      this.userService.userEvents
+          .subscribe(events => {
+              this.cachedUserEvents = events;
+              this.loadEvents();
+          })
+  }
+
+  loadEvents(){
+      let eventItems = this.cachedUserEvents.map(cachedEvents => {
+          return {
+              title: cachedEvents.title,
+              startTime: new Date(moment(cachedEvents.due).format()),
+              endTime: new Date(moment(cachedEvents.due).format())
+          };
+      });
+      console.log(eventItems);
+      this.eventSource = eventItems;
   }
 
   // Display Month
@@ -124,7 +147,7 @@ export class HomePage {
           events.push({
               title: 'Random Event - ' + i,
               startTime: startTime,
-              endTime: endTime,  // get ridz
+              endTime: endTime,
               allDay: false
           });
       }
