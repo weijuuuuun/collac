@@ -147,7 +147,6 @@ export class MyApp {
       this.options.push({
           displayName: 'Task',
           subItems: taskOptionItems
-
       });
 
       // Load simple menu options
@@ -155,15 +154,16 @@ export class MyApp {
       this.options.push({
           iconName: 'fa fa-address-book',
           displayName: 'Contacts',
-          component: ContactPage,
-
+          custom: {
+              isPage: true,
+              pageName: ContactPage
+          }
       });
 
       this.options.push({
           iconName: 'fa fa-cogs',
-          displayName: 'Settings',
-          component: HomePage,
-
+          displayName: 'Settings'
+          //component: HomePage
       });
   }
 
@@ -188,8 +188,11 @@ export class MyApp {
                   itemDue: option.custom.event.due,
                   itemNotes: option.custom.event.description
               });
+          }
+          else if(option.custom && option.custom.isPage) {
+              this.navigateToPage(option.custom.pageName);
           } else {
-              this.navCtrl.setRoot(option.component || HomePage, { 'title': option.displayName });
+              //this.navCtrl.setRoot(option.component || HomePage, { 'title': option.displayName });
           }
 
       });
