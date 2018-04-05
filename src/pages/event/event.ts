@@ -38,25 +38,32 @@ export class EventPage {
   }
 
   ionViewWillEnter() {
-     this.eventService.getEventMembers(this.id)
-         .subscribe(eventData => {
-             console.log("event.ts: Received event data.");
-             this.memberList = eventData;
-             console.log(this.memberList);
-         }, err => {
-             console.log("event.ts: Error getting event data.");
-             console.log(err);
-         });
-     this.eventService.getEventOwner(this.id)
-         .subscribe(ownerData => {
-             console.log("events.ts: retrieved owner data.");
-             console.log(ownerData)
+     this.getEventMembers();
+     this.getEventOwner();
+  }
+
+  getEventMembers(){
+      this.eventService.getEventMembers(this.id)
+          .subscribe(eventData => {
+              console.log("event.ts: Received event data.");
+              this.memberList = eventData;
+              console.log(this.memberList);
+          }, err => {
+              console.log("event.ts: Error getting event data.");
+              console.log(err);
+          });
+  }
+
+  getEventOwner(){
+      this.eventService.getEventOwner(this.id)
+          .subscribe(ownerData => {
+              console.log("events.ts: retrieved owner data.");
+              console.log(ownerData)
               this.owner = ownerData;
               console.log(this.owner);
           }, err => {
-             console.log("event.ts: error getting owner data");
-              console.log(err);
+              console.log("event.ts: error getting owner data");
+              //console.log(err);
           });
-
   }
 }

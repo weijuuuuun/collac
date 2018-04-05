@@ -5,6 +5,7 @@ import {ChatPage} from "../chat/chat";
 import {Storage} from "@ionic/storage";
 import {UserService} from "../../providers/UserService";
 import {Event} from "../../models/Event";
+import {EventPage} from "../event/event";
 
 
 @IonicPage()
@@ -62,10 +63,12 @@ export class HomePage {
    *  Upon page called, this method will be initiated
    *  It will reach the backend to retrieve data on events
    */
+  console.log("will enter");
     this.initializeUserEvents();
   }
 
   initializeUserEvents(){
+      console.log("initialize");
       this.userService.userEvents
           .subscribe(events => {
               this.cachedUserEvents = events;
@@ -74,15 +77,19 @@ export class HomePage {
   }
 
   loadEvents(){
+      console.log("load events");
       let eventItems = this.cachedUserEvents.map(cachedEvents => {
           return {
+              id: cachedEvents.id,
               title: cachedEvents.title,
               startTime: new Date(moment(cachedEvents.due).format()),
-              endTime: new Date(moment(cachedEvents.due).format())
+              endTime: new Date(moment(cachedEvents.due).format()),
+              notes: cachedEvents.description
           };
       });
       console.log(eventItems);
       this.eventSource = eventItems;
+      console.log("loaded")
   }
 
   // Display Month
@@ -105,7 +112,7 @@ export class HomePage {
       let end = moment(event.endTime).format('llll');
 
       let alert = this.alertCtrl.create({
-          title: '' + event.title,
+          title: ' ' + event.title,
           subTitle: 'Due: ' +  end + '<br>With: ' + event.group,
           buttons: [
               {
@@ -116,12 +123,24 @@ export class HomePage {
                   }
               },
               {
-                text: 'Edit',
+                text: 'View',
+                handler: () => {
+                    this.navCtrl.push(EventPage,{
+                        itemId: event.id,
+                        itemTitle: event.title,
+                        itemDue: event.due,
+                        itemNotes: event.notes
+                    });
+                }
               },
               {
                   text: "Message",
                   handler: () => {
                       console.log('Open messanger');
+                      this.navCtrl.push(ChatPage,{
+                          title: event.title,
+                          id: event.id
+                      });
                   }
               }
           ]

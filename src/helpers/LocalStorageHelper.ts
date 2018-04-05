@@ -25,8 +25,11 @@ export class LocalStorageHelper {
             return loggedInUser;
           });
       })
-
   }
+  // public setUserEvents(event: Event): Promise<any> {
+  //     return this.storage.set('UserEvents', event);
+  // }
+  // public getUserEvents
 
   public clearLocalStorage(): Promise<any> {
     return this.storage.clear();

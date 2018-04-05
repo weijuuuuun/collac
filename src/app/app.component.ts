@@ -158,12 +158,7 @@ export class MyApp {
           component: ContactPage,
 
       });
-      this.options.push({
-          iconName: 'fa fa-users',
-          displayName: 'Groups',
-          component: GroupPage,
 
-      });
       this.options.push({
           iconName: 'fa fa-cogs',
           displayName: 'Settings',
