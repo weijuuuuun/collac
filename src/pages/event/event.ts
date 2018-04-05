@@ -16,7 +16,8 @@ export class EventPage {
   startTime: string;
   endTime: string;
   notes: string;
-  memberList:any
+  memberList:any;
+  owner: User;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -46,5 +47,13 @@ export class EventPage {
              console.log("event.ts: Error getting event data.");
              console.log(err);
          });
+     this.eventService.getEventOwner(this.id)
+         .subscribe(ownerData => {
+              this.owner = ownerData;
+              console.log(this.owner);
+          }, err => {
+              console.log(err);
+          });
+
   }
 }

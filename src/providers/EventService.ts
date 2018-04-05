@@ -63,10 +63,7 @@ export class EventService {
                     }
                   }
                 }
-            `,
-            variables: {
-                eventId: eventID
-            }
+            `
         })
             .valueChanges
             .pipe(
@@ -75,26 +72,28 @@ export class EventService {
                 })
             );
     }
-    // public getEventOwner(eventID: number) {
-    //     return this.apollo.watchQuery<any>({
-    //         query: gql`
-    //             query {
-    //                 event(id: ${eventID}){
-    //                     owner
-    //                 }
-    //             }
-    //         `,
-    //         variables: {
-    //             eventId: eventID
-    //         }
-    //     })
-    //         .valueChanges
-    //         .pipe(
-    //             map(result => {
-    //                 return result.data.event.owner;
-    //             })
-    //         );
-    // }
+
+    public getEventOwner(eventID: number) {
+        return this.apollo.watchQuery<any>({
+            query: gql`
+                query {
+                    event(id: ${eventID}){
+                        owner {
+                            id,
+                            firstName,
+                            lastName
+                        }
+                    }
+                }
+            `
+        })
+            .valueChanges
+            .pipe(
+                map(result => {
+                    return result.data.event.owner;
+                })
+            );
+    }
 
 
 
