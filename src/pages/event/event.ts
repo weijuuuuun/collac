@@ -4,7 +4,10 @@ import * as moment from "moment";
 import {ChatPage} from "../chat/chat";
 import {EventService} from "../../providers/EventService";
 import {TaskService} from "../../providers/TaskService";
+import {UserService} from "../../providers/UserService";
 import {User} from "../../models/User";
+import {LocalStorageHelper} from "../../helpers/LocalStorageHelper";
+import {forEach} from "async";
 
 @IonicPage()
 @Component({
@@ -20,12 +23,16 @@ export class EventPage {
   memberList:any;
   owner: any;
   tasks:any;
+  loggedInUser: User;
+  friendList: any;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public alertCtrl: AlertController,
               private eventService: EventService,
-              private taskService: TaskService) {
+              private userService: UserService,
+              private localStorageHelper: LocalStorageHelper) {
+
     this.id = this.navParams.get("itemId");
     this.title = this.navParams.get("itemTitle");
     // this.endTime = moment(new Date()).format('lll');
@@ -70,38 +77,32 @@ export class EventPage {
       }).present();
   }
 
-    addMemberAlert(){
-        this.alertCtrl.create({
-            title: "Add Member",
-            message: "Please input user's Email",
-            inputs:[
-                {
-                    name: 'username',
-                    placeholder: 'Username or Email'
-                }
-            ],
-            buttons: [
-                {
-                    text: 'Cancel',
-                    role: 'cancel',
-                    handler: data => {
-                        console.log('Cancelled');
-                    }
-                },
-                {
-                    text: 'Add',
-                    role: 'submit',
-                    handler: data => {
-                        console.log(data.username);
-                        // if valid
-                        // blablabla
-                        // else
-                        // blablabla
-                    }
-                }
-            ]
-        }).present();
-    }
+  addMemberRadio(){
+      let memberAlert = this.alertCtrl.create();
+      memberAlert.setTitle('Add Member');
+
+      for (let i = 0; i < this.memberList.length; i ++){
+          for (let j = 0; j < this.friendList.length; j++){
+              if (this.memberList[i].id != this.friendList[j].id){
+                  memberAlert.addInput({
+                      type: 'checkbox',
+                      label: this.friendList[j].firstName,
+                      value: this.friendList[j].id
+                  });
+              }
+          }
+          break;
+      }
+      memberAlert.addButton('Cancel');
+      memberAlert.addButton({
+          text: 'Add',
+          handler:(data:any) => {
+              console.log("Add Member: " + data);
+          }
+      });
+
+      memberAlert.present();
+  }
 
   launchChat(){
       console.log("Messenger: Event " + this.id);
@@ -115,6 +116,16 @@ export class EventPage {
     this.getEventMembers();
     this.getEventOwner();
     this.getEventTasks();
+    this.localStorageHelper.getLoggedInUser()
+        .then(user => {
+            this.loggedInUser = user;
+            this.userService.getFriends(this.loggedInUser.id)
+                .subscribe(friendsData => {
+                    this.friendList = friendsData;
+                }), err => {
+                console.log(err);
+            }
+        });
   }
 
   getEventMembers(){
@@ -150,4 +161,5 @@ export class EventPage {
 
         })
   }
+
 }
