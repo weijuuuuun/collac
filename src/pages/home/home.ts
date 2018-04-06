@@ -58,7 +58,7 @@ export class HomePage {
     });
   }
 
-  ionViewDidEnter() {
+  ngAfterViewInit() {
   /**
    *  Upon page called, this method will be initiated
    *  It will reach the backend to retrieve data on events

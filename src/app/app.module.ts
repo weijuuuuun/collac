@@ -24,6 +24,7 @@ import {UserService} from "../providers/UserService";
 import {LocalStorageHelper} from "../helpers/LocalStorageHelper";
 import {LoginPageModule} from "../pages/login/login.module";
 import {EventPage} from "../pages/event/event";
+import {TaskService} from "../providers/TaskService";
 // Firebase config
 var config = {
     apiKey: "AIzaSyAIrkjicK4M9CWrRfEYIz32h2snBNxQD2s",
@@ -70,6 +71,7 @@ var config = {
     AuthenticationService,
     EventService,
     UserService,
+    TaskService,
     LocalStorageHelper
   ]
 })

@@ -32,6 +32,7 @@ export class LoginPage {
           this.userService.populateCachedEvents(user.id);
           this.userService.populateCachedTasks(user.id);
           this.navCtrl.setRoot('HomePage');
+          console.log("ionView: Set ROOT");
         }
 
       });
@@ -78,7 +79,8 @@ export class LoginPage {
             console.log("Login.ts: Successfully store logged in user details");
             this.userService.populateCachedEvents(loggedInUser.id);
             this.presentSuccessToast(loggedInUser.firstName);
-            this.navCtrl.setRoot('HomePage');
+              this.navCtrl.setRoot('HomePage');
+              console.log("doLogin: Set ROOT");
           });
 
       }, err => {
