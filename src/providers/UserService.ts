@@ -153,6 +153,9 @@ export class UserService {
       return this.userEventsSubject.asObservable();
   }
 
+    public getTaskObservable(): Observable<any> {
+        return this.userEventsSubject.asObservable();
+    }
 
   public clearCachedEvents(): void {
     this.userEventsSubject = new BehaviorSubject([]);

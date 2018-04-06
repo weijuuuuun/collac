@@ -70,7 +70,6 @@ export class MyApp {
           this.splashScreen.hide();
 
           this.initializeUserEvents();
-
           // Initialize some options
           this.initializeOptions();
       });
@@ -88,17 +87,17 @@ export class MyApp {
         console.log(events);
 
         this.cachedUserEvents = events;
-        // this.initializeUserTasks();
+        this.initializeUserTasks();
         this.initializeOptions();
       })
   }
 
-  // private initializeUserTasks(): void {
-  //   this.userService.userTasks
-  //     .subscribe(tasks => {
-  //       this.cachedUserTasks = tasks;
-  //     })
-  // }
+  private initializeUserTasks(): void {
+    this.userService.getTaskObservable()
+      .subscribe(tasks => {
+        this.cachedUserTasks = tasks;
+      })
+  }
 
   private initializeOptions(): void {
       this.options = new Array<MenuOptionModel>();
