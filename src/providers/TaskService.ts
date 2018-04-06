@@ -19,30 +19,5 @@ export class TaskService {
 
     }
 
-    public getEventTask() {
-        return this.apollo.watchQuery<any>({
-            query: gql`
-                query {
-                    tasks {
-                        id,
-                        title
-                        event{
-                            id,
-                            title,
-                        },
-                        assigned{
-                            firstName
-                        }
-                    }
-                }
-            `
-        })
-            .valueChanges
-            .pipe(
-                map(result => {
-                    return result.data.tasks;
-                })
-            );
-    }
 
 }

@@ -8,8 +8,6 @@ import gql from "graphql-tag";
 import "rxjs/add/operator/mergeMap";
 import {Event} from "../models/Event";
 import {Task} from "../models/Task";
-import {Subject} from "rxjs/Subject";
-import {LocalStorageHelper} from "../helpers/LocalStorageHelper";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 @Injectable()
@@ -153,9 +151,9 @@ export class UserService {
       return this.userEventsSubject.asObservable();
   }
 
-    public getTaskObservable(): Observable<any> {
-        return this.userEventsSubject.asObservable();
-    }
+  public getTasksObservable(): Observable<any> {
+      return this.userTasksSubject.asObservable();
+  }
 
   public clearCachedEvents(): void {
     this.userEventsSubject = new BehaviorSubject([]);

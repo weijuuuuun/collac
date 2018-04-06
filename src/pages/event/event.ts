@@ -18,7 +18,7 @@ export class EventPage {
   endTime: string;
   notes: string;
   memberList:any;
-  owner: User;
+  owner: any;
   tasks:any;
 
   constructor(public navCtrl: NavController,
@@ -113,12 +113,12 @@ export class EventPage {
 
   ionViewWillEnter() {
     this.getEventMembers();
-    //this.getEventOwner();
-    this.getEventTasks()
+    this.getEventOwner();
+    this.getEventTasks();
   }
 
   getEventMembers(){
-      this.eventService.getEventMembers(this.id)
+      this.eventService.getEvent(this.id)
           .subscribe(eventData => {
               console.log("event.ts: Received event data.");
               this.memberList = eventData;
@@ -133,21 +133,21 @@ export class EventPage {
       this.eventService.getEventOwner(this.id)
           .subscribe(ownerData => {
               console.log("events.ts: retrieved owner data.");
+              this.owner = ownerData.id;
               console.log(ownerData);
-              this.owner = ownerData;
-              console.log(this.owner);
           }, err => {
               console.log("event.ts: error getting owner data");
-              //console.log(err);
+              console.log(err);
           });
   }
 
   getEventTasks(){
-    this.taskService.getEventTask()
+    this.eventService.getEventTask(this.id)
         .subscribe(eventTask => {
             console.log("event.ts: retrieved tasks");
             console.log(eventTask);
             this.tasks = eventTask;
+
         })
   }
 }

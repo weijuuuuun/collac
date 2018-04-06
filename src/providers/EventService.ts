@@ -23,33 +23,33 @@ export class EventService {
      * Making a GraphQL Call
      * @returns {Observable<any>}
      */
-    public queryEvent(eventID: number) {
+    // public queryEvent(eventID: number) {
+    //
+    //     console.log("Querying apollo");
+    //
+    //     // Define the data you want here.
+    //     return this.apollo.watchQuery<any>({
+    //         query: gql`
+    //             query {
+    //                 event(id: ${eventID}) {
+    //                 id,
+    //                 title
+    //               }
+    //             }
+    //         `,
+    //         variables: {
+    //             eventId: 1
+    //         }
+    //     })
+    //         .valueChanges
+    //         .pipe(
+    //             map(result => {
+    //                 return result.data.event;
+    //             })
+    //         );
+    // }
 
-        console.log("Querying apollo");
-
-        // Define the data you want here.
-        return this.apollo.watchQuery<any>({
-            query: gql`
-                query {
-                    event(id: ${eventID}) {
-                    id,
-                    title
-                  }
-                }
-            `,
-            variables: {
-                eventId: 1
-            }
-        })
-            .valueChanges
-            .pipe(
-                map(result => {
-                    return result.data.event;
-                })
-            );
-    }
-
-    public getEventMembers(eventID: number) {
+    public getEvent(eventID: number) {
         return this.apollo.watchQuery<any>({
             query: gql`
                 query {
@@ -74,12 +74,11 @@ export class EventService {
     }
 
     public getEventOwner(eventID: number) {
-        console.log("calling get owner");
-        console.log(eventID);
         return this.apollo.watchQuery<any>({
             query: gql`
                 query {
                     event(id: ${eventID}){
+                    id
                         owner {
                             id,
                             firstName,
@@ -93,6 +92,32 @@ export class EventService {
             .pipe(
                 map(result => {
                     return result.data.event.owner;
+                })
+            );
+    }
+
+    public getEventTask(eventID: number) {
+        return this.apollo.watchQuery<any>({
+            query: gql`
+                query {
+                    event(id: ${eventID}){
+                    id
+                        tasks {
+                            id,
+                            title,
+                            assigned {
+                                id,
+                                firstName
+                            }
+                        }
+                    }
+                }
+            `
+        })
+            .valueChanges
+            .pipe(
+                map(result => {
+                    return result.data.event.tasks;
                 })
             );
     }

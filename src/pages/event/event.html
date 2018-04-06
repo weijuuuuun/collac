@@ -43,8 +43,10 @@
             <ion-label class="lblSmall">MEMBERS</ion-label>
             <ion-label align="right" class="lblSmaller" (click)="addMemberAlert()">Add Member</ion-label>
         </ion-item>
+
         <ion-item  *ngFor="let member of memberList">
             <ion-label>{{member.firstName}} {{member.lastName}}</ion-label>
+            <ion-label *ngIf="member.id == owner"align="right" class="lblSmall">OWNER</ion-label>
         </ion-item>
      </ion-list>
 

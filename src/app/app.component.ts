@@ -93,8 +93,9 @@ export class MyApp {
   }
 
   private initializeUserTasks(): void {
-    this.userService.getTaskObservable()
+    this.userService.getTasksObservable()
       .subscribe(tasks => {
+        console.log(tasks);
         this.cachedUserTasks = tasks;
       })
   }
