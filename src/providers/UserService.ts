@@ -10,22 +10,20 @@ import {Event} from "../models/Event";
 import {Task} from "../models/Task";
 import {Subject} from "rxjs/Subject";
 import {LocalStorageHelper} from "../helpers/LocalStorageHelper";
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 @Injectable()
 export class UserService {
 
 
-    private userEventsSubject: Subject<Event[]> = new Subject<Event[]>();
-    public userEvents: Observable<Event[]> = this.userEventsSubject.asObservable();
-
-    private userTasksSubject: Subject<Task[]> = new Subject<Task[]>();
-    public userTasks: Observable<Task[]> = this.userTasksSubject.asObservable();
+    private userEventsSubject: BehaviorSubject<Array<Event>> = new BehaviorSubject([]);
+    private userTasksSubject: BehaviorSubject<Array<Task>> = new BehaviorSubject([]);
 
     /**
      * All codes calling  external backend, should be in Service class
      * Your component / page will then call these methods to retrieve data.
      */
-    constructor(private http:HttpClient, private apollo:Apollo, private localStorageaHelper: LocalStorageHelper) {
+    constructor(private http:HttpClient, private apollo:Apollo) {
 
     }
 
@@ -131,32 +129,37 @@ export class UserService {
   }
 
 
-  public getUserEvents(userId: number): Observable<Event[]> {
+  public populateCachedEvents(userId: number): Observable<Event[]> {
     return this.getEventsJoined(userId)
       .flatMap(eventsJoined => {
         return this.getEventsOwned(userId)
           .map(eventsOwned => {
-              this.userEventsSubject.next(eventsJoined.concat(eventsOwned));
-              return eventsJoined.concat(eventsOwned);
-              })
+            this.userEventsSubject.next(eventsJoined.concat(eventsOwned));
+            return eventsJoined.concat(eventsOwned);
           })
-      }
-
-
-  public populateCachedTasks(userId: number): void {
-    this.getTasks(userId)
-      .subscribe(tasks => {
-        this.userTasksSubject.next(tasks);
       })
   }
 
 
+  public populateCachedTasks(userId: number): Observable<Task[]> {
+    return this.getTasks(userId)
+      .map(tasks => {
+        this.userTasksSubject.next(tasks);
+        return tasks;
+      })
+  }
+
+  public getEventsObservable(): Observable<any> {
+      return this.userEventsSubject.asObservable();
+  }
+
+
   public clearCachedEvents(): void {
-    this.userEvents= new Subject<Event[]>().asObservable();
+    this.userEventsSubject = new BehaviorSubject([]);
   }
 
   public clearCachedTasks(): void {
-      this.userTasks = new Subject<Task[]>().asObservable();
+      this.userTasksSubject = new BehaviorSubject([]);
   }
 
 

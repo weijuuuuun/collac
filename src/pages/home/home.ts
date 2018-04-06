@@ -1,4 +1,4 @@
-import {Component, SimpleChanges} from '@angular/core';
+import {ChangeDetectorRef, Component, NgZone, SimpleChanges} from '@angular/core';
 import {AlertController, IonicPage, ModalController, NavController, NavParams} from 'ionic-angular';
 import * as moment from "moment";
 import {ChatPage} from "../chat/chat";
@@ -15,7 +15,8 @@ import {LocalStorageHelper} from "../../helpers/LocalStorageHelper";
   templateUrl: 'home.html',
 })
 export class HomePage {
-  eventSource;
+
+  eventSource = [];
   cachedUserEvents: Event[] = [];
   viewTitle: string;
   selectedDay = new Date();
@@ -24,25 +25,22 @@ export class HomePage {
   calendar = {
       mode: 'month',
       currentDate: this.selectedDay
-  }
+  };
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public  storage: Storage,
               private modalCtrl: ModalController,
               private alertCtrl: AlertController,
-              private userService: UserService,
-              private localStorageHelper: LocalStorageHelper) {
+              private userService: UserService) {
 
-      this.localStorageHelper.getUserEvents()
-          .then(userEvents => {
-              this.eventSource = userEvents;
-          })
 
-      // this.initializeUserEvents();
   }
 
 
+  ionViewWillLoad() {
+    this.initializeUserEvents();
+  }
 
 
 
@@ -71,21 +69,13 @@ export class HomePage {
     });
   }
 
-  ionViewWillEnter() {
-  /**
-   *  Upon page called, this method will be initiated
-   *  It will reach the backend to retrieve data on events
-   */
 
-  }
 
   initializeUserEvents(){
       console.log("calling initialize user events");
-      this.userService.userEvents
+      this.userService.getEventsObservable()
           .subscribe(events => {
               this.cachedUserEvents = events;
-              console.log("called cached user vent subscribe from home.ts");
-              console.log(events);
               this.loadEvents();
           },err => {
               console.log("Error getting events");
@@ -94,8 +84,7 @@ export class HomePage {
   }
 
   loadEvents(){
-      console.log("load events");
-      this.eventSource = this.cachedUserEvents.map(cachedEvents => {
+      let someEvent = this.cachedUserEvents.map(cachedEvents => {
           return {
               id: cachedEvents.id,
               title: cachedEvents.title,
@@ -104,15 +93,11 @@ export class HomePage {
               notes: cachedEvents.description
           };
       });
-      // console.log(eventItems);
-      // if(eventItems){
-      //     this.eventSource = eventItems;
-      //     console.log("loaded")
-      //     return;
-      // }
 
-      // console.log("failed to load");
-      // console.log(eventItems);
+      this.eventSource = someEvent;
+      console.log("home.ts: Done loading events: ");
+      console.log(this.eventSource);
+
   }
 
   // Display Month

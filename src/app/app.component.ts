@@ -56,8 +56,11 @@ export class MyApp {
               private toast: ToastController,
               private localStorageHelper: LocalStorageHelper,
               private userService: UserService) {
+
       this.initializeApp();
   }
+
+
 
 
   // subscribes and gets updates
@@ -67,7 +70,6 @@ export class MyApp {
           this.splashScreen.hide();
 
           this.initializeUserEvents();
-          this.initializeUserTasks();
 
           // Initialize some options
           this.initializeOptions();
@@ -80,23 +82,23 @@ export class MyApp {
   }
 
   private initializeUserEvents(): void {
-    this.userService.userEvents
+    this.userService.getEventsObservable()
       .subscribe(events => {
-        console.log("Called initialize event subscribe");
+        console.log("app.component.ts: Called initialize event subscribe");
+        console.log(events);
 
         this.cachedUserEvents = events;
-        this.initializeUserTasks();
+        // this.initializeUserTasks();
         this.initializeOptions();
-        console.log(this.cachedUserEvents);
       })
   }
 
-  private initializeUserTasks(): void {
-    this.userService.userTasks
-      .subscribe(tasks => {
-        this.cachedUserTasks = tasks;
-      })
-  }
+  // private initializeUserTasks(): void {
+  //   this.userService.userTasks
+  //     .subscribe(tasks => {
+  //       this.cachedUserTasks = tasks;
+  //     })
+  // }
 
   private initializeOptions(): void {
       this.options = new Array<MenuOptionModel>();
