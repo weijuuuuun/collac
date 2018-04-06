@@ -29,8 +29,9 @@ export class LoginPage {
       .then(user => {
         if(user) {
           console.log("login.ts: User is already logged in");
-          this.userService.populateCachedEvents(user.id);
-          this.userService.populateCachedTasks(user.id);
+          console.log(user.id);
+          // this.userService.populateCachedEvents(user.id);
+          // this.userService.populateCachedTasks(user.id);
           this.navCtrl.setRoot('HomePage');
           console.log("ionView: Set ROOT");
         }
@@ -77,10 +78,19 @@ export class LoginPage {
         this.localStorageHelper.setLoggedInUser(loggedInUser)
           .then(() => {
             console.log("Login.ts: Successfully store logged in user details");
-            this.userService.populateCachedEvents(loggedInUser.id);
-            this.presentSuccessToast(loggedInUser.firstName);
-              this.navCtrl.setRoot('HomePage');
-              console.log("doLogin: Set ROOT");
+            console.log(loggedInUser.id);
+            this.userService.getUserEvents(loggedInUser.id)
+                .subscribe((userEvents) => {
+                    this.localStorageHelper.setUserEvents(userEvents);
+                })
+            // this.userService.populateCachedEvents(loggedInUser.id)
+            //     .subscribe(() => {
+            //         this.userService.populateCachedTasks(loggedInUser.id);
+            //         this.presentSuccessToast(loggedInUser.firstName);
+            //         this.navCtrl.setRoot('HomePage');
+            //         console.log("doLogin: Set ROOT");
+            //     });
+
           });
 
       }, err => {

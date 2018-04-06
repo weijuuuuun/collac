@@ -9,6 +9,7 @@ import "rxjs/add/operator/mergeMap";
 import {Event} from "../models/Event";
 import {Task} from "../models/Task";
 import {Subject} from "rxjs/Subject";
+import {LocalStorageHelper} from "../helpers/LocalStorageHelper";
 
 @Injectable()
 export class UserService {
@@ -24,7 +25,7 @@ export class UserService {
      * All codes calling  external backend, should be in Service class
      * Your component / page will then call these methods to retrieve data.
      */
-    constructor(private http:HttpClient, private apollo:Apollo) {
+    constructor(private http:HttpClient, private apollo:Apollo, private localStorageaHelper: LocalStorageHelper) {
 
     }
 
@@ -130,15 +131,17 @@ export class UserService {
   }
 
 
-  public populateCachedEvents(userId: number): void {
-    this.getEventsJoined(userId)
-      .subscribe(eventsJoined => {
+  public getUserEvents(userId: number): Observable<Event[]> {
+    return this.getEventsJoined(userId)
+      .flatMap(eventsJoined => {
         return this.getEventsOwned(userId)
-          .subscribe(eventsOwned => {
-            this.userEventsSubject.next(eventsJoined.concat(eventsOwned));
+          .map(eventsOwned => {
+              this.userEventsSubject.next(eventsJoined.concat(eventsOwned));
+              return eventsJoined.concat(eventsOwned);
+              })
           })
-      });
-  }
+      }
+
 
   public populateCachedTasks(userId: number): void {
     this.getTasks(userId)

@@ -18,17 +18,32 @@
 <ion-content class="masters">
   <h1 padding-horizontal class="h1-header">{{ viewTitle }}</h1>
   <div class="spacer spacer-rainbow-divider" style="width: 110%; height:8px"></div>
-  <calendar no-padding
-    [eventSource]="eventSource"
-    [calendarMode]="calendar.mode"
-    [currentDate]="calendar.currentDate"
-    (onEventSelected)="onEventSelected($event)"
-    (onTitleChanged)="onTitleChanged($event)"
-    (onTimeSelected)="onTimeSelected($event)"
-    step="30"
-    class="calendar"
-    [monthviewDisplayEventTemplate]="template">
-  </calendar>
+
+    <calendar *ngIf="eventSource"
+              no-padding
+              [eventSource]="eventSource"
+              [calendarMode]="calendar.mode"
+              [currentDate]="calendar.currentDate"
+              (onEventSelected)="onEventSelected($event)"
+              (onTitleChanged)="onTitleChanged($event)"
+              (onTimeSelected)="onTimeSelected($event)"
+              step="30"
+              class="calendar"
+              [monthviewDisplayEventTemplate]="template">
+    </calendar>
+
+  <!--<calendar *ngIf="!eventSource"-->
+          <!--no-padding-->
+    <!--[eventSource]="eventSource"-->
+    <!--[calendarMode]="calendar.mode"-->
+    <!--[currentDate]="calendar.currentDate"-->
+    <!--(onEventSelected)="onEventSelected($event)"-->
+    <!--(onTitleChanged)="onTitleChanged($event)"-->
+    <!--(onTimeSelected)="onTimeSelected($event)"-->
+    <!--step="30"-->
+    <!--class="calendar"-->
+    <!--[monthviewDisplayEventTemplate]="template">-->
+  <!--</calendar>-->
 </ion-content>
 
 <ion-footer>

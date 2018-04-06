@@ -1,6 +1,8 @@
 import {Injectable} from "@angular/core";
 import {Storage} from "@ionic/storage";
 import {User} from "../models/User";
+import {Event} from "../models/Event";
+
 
 @Injectable()
 export class LocalStorageHelper {
@@ -34,5 +36,24 @@ export class LocalStorageHelper {
   public clearLocalStorage(): Promise<any> {
     return this.storage.clear();
   }
+
+  public setUserEvents(events: Event[]) {
+      return this.storage.set('userEvents', events);
+  }
+
+
+    public getUserEvents(): Promise<Event[]> {
+        return this.storage.ready()
+            .then(() => {
+                return this.storage.get('userEvents')
+                    .then(userEvents => {
+                        if( userEvents === null) {
+                            console.log("LocalStorageHelper: userEvents is null in Local Storage");
+                            return null;
+                        }
+                        return userEvents;
+                    });
+            })
+    }
 
 }
