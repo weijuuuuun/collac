@@ -4,6 +4,7 @@ import * as moment from "moment";
 import {UserService} from "../../providers/UserService";
 import {LocalStorageHelper} from "../../helpers/LocalStorageHelper";
 import {User} from "../../models/User";
+import {EventService} from "../../providers/EventService";
 
 @IonicPage()
 @Component({
@@ -32,9 +33,6 @@ export class EventModalPage {
         preselectedDate.setHours(8);                    // make 8am as default start time
         let selected = moment(preselectedDate).format();
         this.event.endTime = selected;
-        // let addOneHour = preselectedDate.setHours(9);   // make 9am as default end time
-        // let selectedAdded = moment(addOneHour).format();
-        // this.event.endTime = selectedAdded;
     }
 
     ionViewWillEnter(){

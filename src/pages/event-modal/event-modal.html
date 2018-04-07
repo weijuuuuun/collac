@@ -20,14 +20,8 @@
     </ion-item>
 
     <ion-item>
-      <ion-label>Notification</ion-label>
-      <ion-select [(ngModel)]="event.notification" interface="action-sheet">
-        <ion-option value="1">1 hour before</ion-option>
-        <ion-option value="2">2 hours before</ion-option>
-        <ion-option value="3">3 hours before</ion-option>
-        <ion-option value="4">4 hours before</ion-option>
-        <ion-option value="5">5 hours before</ion-option>
-      </ion-select>
+      <ion-label>Notes</ion-label>
+      <ion-input placeholder="Description" align="right" [(ngModel)]="event.notes"></ion-input>
     </ion-item>
 
     <ion-item>

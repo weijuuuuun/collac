@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, NgZone, SimpleChanges} from '@angular/core';
+import {Component} from '@angular/core';
 import {AlertController, IonicPage, ModalController, NavController, NavParams} from 'ionic-angular';
 import * as moment from "moment";
 import {ChatPage} from "../chat/chat";
@@ -6,7 +6,9 @@ import {Storage} from "@ionic/storage";
 import {UserService} from "../../providers/UserService";
 import {Event} from "../../models/Event";
 import {EventPage} from "../event/event";
+import {User} from "../../models/User";
 import {LocalStorageHelper} from "../../helpers/LocalStorageHelper";
+import {EventService} from "../../providers/EventService";
 
 
 @IonicPage()
@@ -21,6 +23,7 @@ export class HomePage {
   viewTitle: string;
   selectedDay = new Date();
   username: string;
+  loggedInUser: User;
 
   calendar = {
       mode: 'month',
@@ -32,7 +35,9 @@ export class HomePage {
               public  storage: Storage,
               private modalCtrl: ModalController,
               private alertCtrl: AlertController,
-              private userService: UserService) {
+              private userService: UserService,
+              private eventService: EventService,
+              private localStorageHelper: LocalStorageHelper) {
 
 
   }
@@ -40,6 +45,10 @@ export class HomePage {
 
   ionViewWillLoad() {
     this.initializeUserEvents();
+    this.localStorageHelper.getLoggedInUser()
+        .then(user => {
+            this.loggedInUser = user;
+        });
   }
 
 
@@ -53,17 +62,36 @@ export class HomePage {
     modal.onDidDismiss(data => {
         if(data){
             let eventData = data;
+            let newEventToCreate: Event = {
+                title: data.title,
+                description: data.notes,
+                owner: {
+                    id: this.loggedInUser.id
+                },
+                due: moment(data.endTime).format('YYYY-MM-DD h:mm:ss')
+            };
+
+            this.eventService.createEvent(newEventToCreate)
+                .subscribe(createdEvent => {
+                    console.log(createdEvent);
+                });
+
+            //let newMemberToEvent = eventData.member;
+
+            console.log(newEventToCreate);
+            //console.log(newMemberToEvent);
 
             eventData.endTime = new Date(data.endTime);
             eventData.startTime = eventData.endTime;
-            console.log(eventData.member);
 
             // assign current eventSource to new event
-            let events = this.eventSource;
-            events.push(eventData);
-            this.eventSource = [];
+            // let events = this.eventSource;
+            // events.push(eventData);
+            // this.eventSource = [];
             setTimeout(() => {
-                this.eventSource = events;
+                //this.eventSource = events;
+                //this.initializeUserEvents();
+                // this.loadEvents();
             });
         }
     });
