@@ -54,13 +54,13 @@ export class EventService {
     //         );
     // }
 
-    public createEvent(event: Event): Observable<Event>{
-        return this.http.post<User>(`http://localhost:9001/events`, event);
+    public createEvent(event: Event): Observable<number>{
+        return this.http.post<number>(`http://localhost:9001/events`, event);
     }
 
-    public eventAddMember(eventId: number, memberId: number){
-        return this.http.post(`http://localhost:9001/events/${eventId}/members`)
-    }
+    // public eventAddMember(eventId: number, memberId: number){
+    //     return this.http.post(`http://localhost:9001/events/${eventId}/members`)
+    // }
 
     public getEventMember(eventID: number) {
         return this.apollo.watchQuery<any>({

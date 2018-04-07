@@ -233,7 +233,7 @@ export class MyApp {
         console.log("app.component.ts: successfully cleared local storage");
         this.userService.clearCachedEvents();
         this.userService.clearCachedTasks();
-        
+
         this.navCtrl.setRoot('LoginPage');
 
       }, err => {

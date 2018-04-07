@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {AlertController, IonicPage, ModalController, NavController, NavParams} from 'ionic-angular';
 import * as moment from "moment";
 import {ChatPage} from "../chat/chat";
@@ -9,6 +9,7 @@ import {EventPage} from "../event/event";
 import {User} from "../../models/User";
 import {LocalStorageHelper} from "../../helpers/LocalStorageHelper";
 import {EventService} from "../../providers/EventService";
+import {CalendarComponent} from "ionic2-calendar/calendar";
 
 
 @IonicPage()
@@ -24,6 +25,8 @@ export class HomePage {
   selectedDay = new Date();
   username: string;
   loggedInUser: User;
+
+  @ViewChild(CalendarComponent) myCalendar:CalendarComponent;
 
   calendar = {
       mode: 'month',
@@ -59,9 +62,8 @@ export class HomePage {
     modal.present();
 
     // data retrieve when modal is dismissed
-    modal.onDidDismiss(data => {
+    modal.onWillDismiss(data => {
         if(data){
-            let eventData = data;
             let newEventToCreate: Event = {
                 title: data.title,
                 description: data.notes,
@@ -72,27 +74,27 @@ export class HomePage {
             };
 
             this.eventService.createEvent(newEventToCreate)
-                .subscribe(createdEvent => {
-                    console.log(createdEvent);
+                .subscribe(newEventId => {
+                  // Add event to your id
+                  newEventToCreate.id = newEventId;
+
+                  // Clone your current events
+                  let newEvents = this.eventSource.slice(0);
+                  newEvents.push(newEventToCreate);
+
+                  // Push new item to eventSource
+                  this.eventSource.push({
+                    id: newEventToCreate.id,
+                    title: newEventToCreate.title,
+                    startTime: new Date(moment(newEventToCreate.due).format()),
+                    endTime: new Date(moment(newEventToCreate.due).format()),
+                    notes: newEventToCreate.description
+                  });
+
+                  this.myCalendar.loadEvents();
+
+                  this.userService.updateCachedEvent(newEvents);
                 });
-
-            //let newMemberToEvent = eventData.member;
-
-            console.log(newEventToCreate);
-            //console.log(newMemberToEvent);
-
-            eventData.endTime = new Date(data.endTime);
-            eventData.startTime = eventData.endTime;
-
-            // assign current eventSource to new event
-            // let events = this.eventSource;
-            // events.push(eventData);
-            // this.eventSource = [];
-            setTimeout(() => {
-                //this.eventSource = events;
-                //this.initializeUserEvents();
-                // this.loadEvents();
-            });
         }
     });
   }
@@ -103,6 +105,8 @@ export class HomePage {
       console.log("calling initialize user events");
       this.userService.getEventsObservable()
           .subscribe(events => {
+            console.log("home.ts: events observable subscribe called");
+            console.log(events);
               this.cachedUserEvents = events;
               this.loadEvents();
           },err => {
@@ -112,6 +116,12 @@ export class HomePage {
   }
 
   loadEvents(){
+
+    // This code should only run to initialize for the first time
+    if(this.eventSource.length != 0) {
+      return;
+    }
+
       let someEvent = this.cachedUserEvents.map(cachedEvents => {
           return {
               id: cachedEvents.id,
@@ -122,11 +132,16 @@ export class HomePage {
           };
       });
 
-      this.eventSource = someEvent;
-      console.log("home.ts: Done loading events: ");
-      console.log(this.eventSource);
+      this.eventSource = [];
+      someEvent.forEach(event => this.eventSource.push(event));
+
+    console.log(this.eventSource);
+    this.myCalendar.loadEvents();
+
 
   }
+
+
 
   // Display Month
   onTitleChanged(title){

@@ -163,5 +163,11 @@ export class UserService {
         this.userTasksSubject = new BehaviorSubject([]);
     }
 
+    public updateCachedEvent(newEvents:Event[]) {
+
+        console.log("=========New Event===");
+        console.log(newEvents);
+        this.userEventsSubject.next(newEvents);
+    }
 
 }
