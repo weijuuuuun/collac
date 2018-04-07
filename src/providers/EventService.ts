@@ -49,7 +49,7 @@ export class EventService {
     //         );
     // }
 
-    public getEvent(eventID: number) {
+    public getEventMember(eventID: number) {
         return this.apollo.watchQuery<any>({
             query: gql`
                 query {
@@ -59,7 +59,8 @@ export class EventService {
                     members{
                         id,
                         firstName,
-                        lastName
+                        lastName,
+                        email
                     }
                   }
                 }

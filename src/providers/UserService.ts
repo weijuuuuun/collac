@@ -36,8 +36,8 @@ export class UserService {
     }
 
     public getFriends(userId: number): Observable<User[]> {
-      return this.apollo.watchQuery<any>({
-        query: gql`
+        return this.apollo.watchQuery<any>({
+            query: gql`
                 query {
                     user(id: ${userId}) {
                     friends{
@@ -48,120 +48,120 @@ export class UserService {
                   }
                 }
             `
-      })
-        .valueChanges
-        .pipe(
-          map(result => {
-            return result.data.user.friends;
-          })
-        );
+        })
+            .valueChanges
+            .pipe(
+                map(result => {
+                    return result.data.user.friends;
+                })
+            );
     }
 
 
-  public getEventsOwned(userId: number): Observable<Event[]> {
-    return this.apollo.watchQuery<any>({
-      query: gql`
-                query {
-                    user(id: ${userId}) {
-                    eventsOwned{
-                        id,
-                        title,
-                        due,
-                        description
+    public getEventsOwned(userId: number): Observable<Event[]> {
+        return this.apollo.watchQuery<any>({
+            query: gql`
+                    query {
+                        user(id: ${userId}) {
+                        eventsOwned{
+                            id,
+                            title,
+                            due,
+                            description
+                        }
+                      }
                     }
-                  }
-                }
-            `
-    })
-      .valueChanges
-      .pipe(
-        map(result => {
-          return result.data.user.eventsOwned;
+                `
         })
-      );
-  }
+            .valueChanges
+            .pipe(
+                map(result => {
+                    return result.data.user.eventsOwned;
+                })
+            );
+    }
 
 
-  public getEventsJoined(userId: number): Observable<Event[]> {
-    return this.apollo.watchQuery<any>({
-      query: gql`
-                query {
-                    user(id: ${userId}) {
-                    eventsJoined{
-                        id,
-                        title,
-                        due,
-                        description
+    public getEventsJoined(userId: number): Observable<Event[]> {
+        return this.apollo.watchQuery<any>({
+            query: gql`
+                    query {
+                        user(id: ${userId}) {
+                        eventsJoined{
+                            id,
+                            title,
+                            due,
+                            description
+                        }
+                      }
                     }
-                  }
-                }
-            `
-    })
-      .valueChanges
-      .pipe(
-        map(result => {
-          return result.data.user.eventsJoined;
+                `
         })
-      );
-  }
+            .valueChanges
+            .pipe(
+                map(result => {
+                    return result.data.user.eventsJoined;
+                })
+            );
+    }
 
-  public getTasks(userId: number): Observable<Task[]> {
-    return this.apollo.watchQuery<any>({
-      query: gql`
-                query {
-                    user(id: ${userId}) {
-                    tasks{
-                        id,
-                        title
+    public getTasks(userId: number): Observable<Task[]> {
+        return this.apollo.watchQuery<any>({
+            query: gql`
+                    query {
+                        user(id: ${userId}) {
+                        tasks{
+                            id,
+                            title
+                        }
+                      }
                     }
-                  }
-                }
-            `
-    })
-      .valueChanges
-      .pipe(
-        map(result => {
-          return result.data.user.tasks;
+                `
         })
-      );
-  }
+            .valueChanges
+            .pipe(
+                map(result => {
+                    return result.data.user.tasks;
+                })
+            );
+    }
 
 
-  public populateCachedEvents(userId: number): Observable<Event[]> {
-    return this.getEventsJoined(userId)
-      .flatMap(eventsJoined => {
-        return this.getEventsOwned(userId)
-          .map(eventsOwned => {
-            this.userEventsSubject.next(eventsJoined.concat(eventsOwned));
-            return eventsJoined.concat(eventsOwned);
-          })
-      })
-  }
+    public populateCachedEvents(userId: number): Observable<Event[]> {
+        return this.getEventsJoined(userId)
+            .flatMap(eventsJoined => {
+                return this.getEventsOwned(userId)
+                    .map(eventsOwned => {
+                        this.userEventsSubject.next(eventsJoined.concat(eventsOwned));
+                        return eventsJoined.concat(eventsOwned);
+                    })
+            })
+    }
 
 
-  public populateCachedTasks(userId: number): Observable<Task[]> {
-    return this.getTasks(userId)
-      .map(tasks => {
-        this.userTasksSubject.next(tasks);
-        return tasks;
-      })
-  }
+    public populateCachedTasks(userId: number): Observable<Task[]> {
+        return this.getTasks(userId)
+            .map(tasks => {
+                this.userTasksSubject.next(tasks);
+                return tasks;
+            })
+    }
 
-  public getEventsObservable(): Observable<any> {
-      return this.userEventsSubject.asObservable();
-  }
+    public getEventsObservable(): Observable<any> {
+        return this.userEventsSubject.asObservable();
+    }
 
-  public getTasksObservable(): Observable<any> {
-      return this.userTasksSubject.asObservable();
-  }
+    public getTasksObservable(): Observable<any> {
+        return this.userTasksSubject.asObservable();
+    }
 
-  public clearCachedEvents(): void {
-    this.userEventsSubject = new BehaviorSubject([]);
-  }
+    public clearCachedEvents(): void {
+        this.userEventsSubject = new BehaviorSubject([]);
+    }
 
-  public clearCachedTasks(): void {
-      this.userTasksSubject = new BehaviorSubject([]);
-  }
+    public clearCachedTasks(): void {
+        this.userTasksSubject = new BehaviorSubject([]);
+    }
 
 
 }
