@@ -31,8 +31,10 @@ export class LoginPage {
           console.log("login.ts: User is already logged in");
           this.userService.populateCachedEvents(user.id)
             .subscribe(() => {
-              this.userService.populateCachedTasks(user.id);
-              this.navCtrl.setRoot('HomePage');
+              this.userService.populateCachedTasks(user.id)
+                .subscribe(() => {
+                  this.navCtrl.setRoot('HomePage');
+                });
             });
         }
 
@@ -82,10 +84,13 @@ export class LoginPage {
 
             this.userService.populateCachedEvents(loggedInUser.id)
                 .subscribe(() => {
-                    this.userService.populateCachedTasks(loggedInUser.id);
-                    this.presentSuccessToast(loggedInUser.firstName);
-                    this.navCtrl.setRoot('HomePage');
-                    console.log("doLogin: Set ROOT");
+                    this.userService.populateCachedTasks(loggedInUser.id)
+                      .subscribe(() => {
+                        this.presentSuccessToast(loggedInUser.firstName);
+                        this.navCtrl.setRoot('HomePage');
+                        console.log("doLogin: Set ROOT");
+                      });
+
                 });
 
           });

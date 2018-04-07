@@ -86,19 +86,16 @@ export class MyApp {
         console.log("app.component.ts: Called initialize event subscribe");
         console.log(events);
 
-        this.cachedUserEvents = events;
-        this.initializeUserTasks();
-        this.initializeOptions();
+        this.userService.getTasksObservable()
+          .subscribe(tasks => {
+            this.cachedUserEvents = events;
+            this.cachedUserTasks = tasks;
+            this.initializeOptions();
+          })
+
       })
   }
 
-  private initializeUserTasks(): void {
-    this.userService.getTasksObservable()
-      .subscribe(tasks => {
-        console.log(tasks);
-        this.cachedUserTasks = tasks;
-      })
-  }
 
   private initializeOptions(): void {
       this.options = new Array<MenuOptionModel>();
@@ -235,6 +232,8 @@ export class MyApp {
       .then(() => {
         console.log("app.component.ts: successfully cleared local storage");
         this.userService.clearCachedEvents();
+        this.userService.clearCachedTasks();
+        
         this.navCtrl.setRoot('LoginPage');
 
       }, err => {
