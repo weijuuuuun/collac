@@ -32,7 +32,7 @@ export class ContactPage {
                 this.userService.getFriends(this.loggedInUser.id)
                     .subscribe(friendsData => {
                         console.log("contact.ts: Received friends data.");
-                        console.log(friendsData);
+                        //console.log(friendsData);
                         this.contactLists = friendsData;
                     }, err => {
                         console.log("contact.ts: Error getting friends data");

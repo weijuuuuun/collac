@@ -60,9 +60,6 @@ export class MyApp {
       this.initializeApp();
   }
 
-
-
-
   // subscribes and gets updates
   initializeApp() {
       this.platform.ready().then(() => {
@@ -84,7 +81,7 @@ export class MyApp {
     this.userService.getEventsObservable()
       .subscribe(events => {
         console.log("app.component.ts: Called initialize event subscribe");
-        console.log(events);
+        //console.log(events);
 
         this.userService.getTasksObservable()
           .subscribe(tasks => {
@@ -95,7 +92,6 @@ export class MyApp {
 
       })
   }
-
 
   private initializeOptions(): void {
       this.options = new Array<MenuOptionModel>();
@@ -168,17 +164,6 @@ export class MyApp {
 
   public selectOption(option: MenuOptionModel): void {
       this.menuCtrl.close().then(() => {
-          // if (option.custom && option.custom.isLogin) {
-          //     this.presentAlert('You\'ve clicked the login option!');
-          // } else if (option.custom && option.custom.isLogout) {
-          //     this.presentAlert('You\'ve clicked the logout option!');
-          // } else if (option.custom && option.custom.isExternalLink) {
-          //     let url = option.custom.externalUrl;
-          //     window.open(url, '_blank');
-          // } else {
-          //     // Redirect to the selected page
-          //     this.navCtrl.setRoot(option.component || HomePage, { 'title': option.displayName });
-          // }
           if(option.custom && option.custom.isEvent){
               //this.presentAlert('You\'ve clicked the event: ' + option.custom.itemName);
               this.navCtrl.push(EventPage,{
@@ -214,9 +199,7 @@ export class MyApp {
       this.navCtrl.push(pageName);
   }
 
-  /**
-    Present toast to let user know that they've logged out successfully.
-   */
+  // Present toast to let user know that they've logged out successfully.
   public presentToast(){
     this.toast.create({
       message: "Logged Out",

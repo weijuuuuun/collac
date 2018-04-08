@@ -3,11 +3,9 @@ import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angula
 import * as moment from "moment";
 import {ChatPage} from "../chat/chat";
 import {EventService} from "../../providers/EventService";
-import {TaskService} from "../../providers/TaskService";
 import {UserService} from "../../providers/UserService";
 import {User} from "../../models/User";
 import {LocalStorageHelper} from "../../helpers/LocalStorageHelper";
-import {forEach} from "async";
 
 @IonicPage()
 @Component({
@@ -28,8 +26,6 @@ export class EventPage {
     tasks: any;
     loggedInUser: User;
     friendList: any;
-    userList: any;
-    tempUser: any;
     tempUserFirstname: any;
     tempUserId: any;
 
@@ -42,7 +38,6 @@ export class EventPage {
 
         this.id = this.navParams.get("itemId");
         this.title = this.navParams.get("itemTitle");
-        // this.endTime = moment(new Date()).format('lll');
         this.endTime = moment(this.navParams.get("itemDue")).format('lll');
         this.notes = this.navParams.get("itemNotes");
     }
@@ -97,12 +92,6 @@ export class EventPage {
     addMemberRadio() {
         let memberAlert = this.alertCtrl.create();
         memberAlert.setTitle('Add Member');
-
-        console.log("memberList");
-        console.log(this.memberList);
-
-        console.log("friendList");
-        console.log(this.friendList);
 
         if (this.memberList.length == 0) {
             for (let i = 0; i < this.friendList.length; i++) {
@@ -181,7 +170,6 @@ export class EventPage {
         this.getEventMembers();
         this.getEventOwner();
         this.getEventTasks();
-        this.getUserList();
         this.localStorageHelper.getLoggedInUser()
             .then(user => {
                 this.loggedInUser = user;
@@ -202,7 +190,7 @@ export class EventPage {
             .subscribe(eventData => {
                 console.log("event.ts: Received event data.");
                 this.memberList = eventData;
-                console.log(this.memberList);
+                //console.log(this.memberList);
             }, err => {
                 console.log("event.ts: Error getting event data.");
                 console.log(err);
@@ -212,9 +200,9 @@ export class EventPage {
     getEventOwner() {
         this.eventService.getEventOwner(this.id)
             .subscribe(ownerData => {
-                console.log("events.ts: retrieved owner data.");
+                console.log("event.ts: retrieved owner data.");
                 this.owner = ownerData.id;
-                console.log(ownerData);
+                //console.log(ownerData);
             }, err => {
                 console.log("event.ts: error getting owner data");
                 console.log(err);
@@ -225,18 +213,9 @@ export class EventPage {
         this.eventService.getEventTask(this.id)
             .subscribe(eventTask => {
                 console.log("event.ts: retrieved tasks");
-                console.log(eventTask);
+                //console.log(eventTask);
                 this.tasks = eventTask;
 
-            })
-    }
-
-    getUserList(){
-        this.userService.getUsers()
-            .subscribe(usersDetail => {
-                console.log("event.ts: retrieved users detail");
-                console.log(usersDetail);
-                this.userList = usersDetail;
             })
     }
 
