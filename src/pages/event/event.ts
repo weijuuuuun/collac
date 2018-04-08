@@ -16,6 +16,9 @@ import {forEach} from "async";
 })
 export class EventPage {
     id: number;
+    userId: number;
+    userFirstname: string;
+    userLastname: string;
     title: string;
     startTime: string;
     endTime: string;
@@ -25,6 +28,10 @@ export class EventPage {
     tasks: any;
     loggedInUser: User;
     friendList: any;
+    userList: any;
+    tempUser: any;
+    tempUserFirstname: any;
+    tempUserId: any;
 
     constructor(public navCtrl: NavController,
                 public navParams: NavParams,
@@ -91,17 +98,65 @@ export class EventPage {
         let memberAlert = this.alertCtrl.create();
         memberAlert.setTitle('Add Member');
 
-        for (let i = 0; i < this.memberList.length; i++) {
+        console.log("memberList");
+        console.log(this.memberList);
+
+        console.log("friendList");
+        console.log(this.friendList);
+
+        if (this.memberList.length == 0) {
+            for (let i = 0; i < this.friendList.length; i++) {
+                memberAlert.addInput({
+                    type: 'checkbox',
+                    label: this.friendList[i].firstName,
+                    value: this.friendList[i].id
+                });
+            }
+        }
+
+        /*
+          If the memberList is not empty,
+          Get diff between friendList and memberList
+          to avoid duplicate entry
+        */
+        else if (this.memberList.length > 1) {
+
+            var temp = [], diff = [];
+
+            for (let i = 0; i < this.memberList.length; i++) {
+                temp[this.memberList[i].id] = true;
+            }
+
             for (let j = 0; j < this.friendList.length; j++) {
-                if (this.memberList[i].id != this.friendList[j].id) {
+                if(temp[this.friendList[j].id]){
+                    delete temp[this.friendList[j].id];
+                } else {
+                    temp[this.friendList[j].id] = true;
+                }
+            }
+
+            for (let k in temp){
+                diff.push(k);
+            }
+
+            console.log(diff);
+
+            for(let l = 0; l < diff.length; l ++){
+                if (diff[l] != this.userId){
+                    console.log(diff[l] + ' ' + this.userId)
+                    this.userService.getUser(diff[l])
+                        .subscribe( userData => {
+                            console.log(userData);
+                            this.tempUserFirstname = userData.firstName;
+                            this.tempUserId = userData.id
+                        });
                     memberAlert.addInput({
                         type: 'checkbox',
-                        label: this.friendList[j].firstName,
-                        value: this.friendList[j].id
+                        label: this.tempUserFirstname,
+                        value: this.tempUserId
                     });
                 }
             }
-            break;
         }
         memberAlert.addButton('Cancel');
         memberAlert.addButton({
@@ -126,9 +181,13 @@ export class EventPage {
         this.getEventMembers();
         this.getEventOwner();
         this.getEventTasks();
+        this.getUserList();
         this.localStorageHelper.getLoggedInUser()
             .then(user => {
                 this.loggedInUser = user;
+                this.userId = user.id;
+                this.userFirstname = user.firstName;
+                this.userLastname = user.lastName;
                 this.userService.getFriends(this.loggedInUser.id)
                     .subscribe(friendsData => {
                         this.friendList = friendsData;
@@ -169,6 +228,15 @@ export class EventPage {
                 console.log(eventTask);
                 this.tasks = eventTask;
 
+            })
+    }
+
+    getUserList(){
+        this.userService.getUsers()
+            .subscribe(usersDetail => {
+                console.log("event.ts: retrieved users detail");
+                console.log(usersDetail);
+                this.userList = usersDetail;
             })
     }
 

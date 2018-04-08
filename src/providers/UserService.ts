@@ -162,4 +162,44 @@ export class UserService {
         //console.log(newEvents);
         this.userEventsSubject.next(newEvents);
     }
+
+    public getUser(userId: number): Observable<any> {
+        return this.apollo.watchQuery<any>({
+            query: gql`
+                query {
+                    user(id: ${userId}) {
+                        id,
+                        firstName,
+                        lastName
+                    }
+                }
+            `
+        })
+            .valueChanges
+            .pipe(
+                map(result => {
+                    return result.data.user;
+                })
+            );
+    }
+
+    public getUsers(): Observable<User[]> {
+        return this.apollo.watchQuery<any>({
+            query: gql`
+                query {
+                    users{
+                        id,
+                        firstName,
+                        lastName
+                    }
+                }
+            `
+        })
+            .valueChanges
+            .pipe(
+                map(result => {
+                    return result.data.users;
+                })
+            );
+    }
 }

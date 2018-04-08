@@ -1,6 +1,6 @@
-import { Component, ViewChild } from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {Content, NavController, NavParams} from 'ionic-angular';
-import { AngularFireDatabase } from 'angularfire2/database';
+import {AngularFireDatabase} from 'angularfire2/database';
 import {User} from "../../models/User";
 import {LocalStorageHelper} from "../../helpers/LocalStorageHelper";
 
@@ -31,17 +31,17 @@ export class ChatPage {
 
 
         // Subscribe to the selected chat  @TODO: /branchname in Firebase
-        this._chatSubscription = this.db.list('/eventid' + this.eventId).valueChanges().subscribe( data => {
+        this._chatSubscription = this.db.list('/eventid' + this.eventId).valueChanges().subscribe(data => {
             this.messages = data;
             this.autoScroll();
         });
     }
 
-    scrollToBottom(){
-        if(this.content._scroll) this.content.scrollToBottom(200);
+    scrollToBottom() {
+        if (this.content._scroll) this.content.scrollToBottom(200);
     }
 
-    autoScroll(){
+    autoScroll() {
         setTimeout(() => {
             this.scrollToBottom();
         }, 200);
@@ -51,7 +51,7 @@ export class ChatPage {
         this.db.list('/eventid' + this.eventId).push({
             username: this.username,
             message: this.message
-        }).then( () => {
+        }).then(() => {
             // message is sent
         });
         //     .catch( () => {
@@ -60,6 +60,7 @@ export class ChatPage {
         this.message = '';
     }
 
+    // this is to show special message when user enters to the chat
     ionViewDidLoad() {
         // this.db.list('/chat').push({
         //     specialMessage: true,
@@ -67,14 +68,14 @@ export class ChatPage {
         // });
     }
 
-    ionViewDidEnter(){
+    ionViewDidEnter() {
         this.autoScroll();
     }
 
-    ionViewWillEnter(){
+    ionViewWillEnter() {
         this.localStorageHelper.getLoggedInUser()
-            .then(user=>{
-                if(!user){
+            .then(user => {
+                if (!user) {
                     console.log("chat.ts: No logged in user data")
                 }
                 this.loggedInUser = user;
