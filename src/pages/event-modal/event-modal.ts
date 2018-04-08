@@ -30,7 +30,7 @@ export class EventModalPage {
                 private  localStorageHelper: LocalStorageHelper) {
 
         let preselectedDate = new Date(this.navParams.get('selectedDay'));
-        preselectedDate.setHours(8);                    // make 8am as default start time
+        preselectedDate.setHours(8); // make 8am as default time
         let selected = moment(preselectedDate).format();
         this.event.endTime = selected;
     }

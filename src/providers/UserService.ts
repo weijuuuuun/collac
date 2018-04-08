@@ -21,10 +21,9 @@ export class UserService {
      * All codes calling  external backend, should be in Service class
      * Your component / page will then call these methods to retrieve data.
      */
-    constructor(private http:HttpClient, private apollo:Apollo) {
+    constructor(private http: HttpClient, private apollo: Apollo) {
 
     }
-
 
 
     /**
@@ -57,7 +56,6 @@ export class UserService {
             );
     }
 
-
     public getEventsOwned(userId: number): Observable<Event[]> {
         return this.apollo.watchQuery<any>({
             query: gql`
@@ -80,7 +78,6 @@ export class UserService {
                 })
             );
     }
-
 
     public getEventsJoined(userId: number): Observable<Event[]> {
         return this.apollo.watchQuery<any>({
@@ -126,7 +123,6 @@ export class UserService {
             );
     }
 
-
     public populateCachedEvents(userId: number): Observable<Event[]> {
         return this.getEventsJoined(userId)
             .flatMap(eventsJoined => {
@@ -137,7 +133,6 @@ export class UserService {
                     })
             })
     }
-
 
     public populateCachedTasks(userId: number): Observable<Task[]> {
         return this.getTasks(userId)
@@ -163,11 +158,8 @@ export class UserService {
         this.userTasksSubject = new BehaviorSubject([]);
     }
 
-    public updateCachedEvent(newEvents:Event[]) {
-
-        console.log("=========New Event===");
-        console.log(newEvents);
+    public updateCachedEvent(newEvents: Event[]) {
+        //console.log(newEvents);
         this.userEventsSubject.next(newEvents);
     }
-
 }
