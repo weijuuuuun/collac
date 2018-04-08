@@ -28,6 +28,7 @@ export class EventPage {
     friendList: any;
     tempUserFirstname: any;
     tempUserId: any;
+    tasksIsEmpty: boolean = true;
 
     constructor(public navCtrl: NavController,
                 public navParams: NavParams,
@@ -216,6 +217,11 @@ export class EventPage {
                 //console.log(eventTask);
                 this.tasks = eventTask;
 
+                if(eventTask.length == 0) {
+                    this.tasksIsEmpty = true;
+                }
+
+                this.tasksIsEmpty = false
             })
     }
 

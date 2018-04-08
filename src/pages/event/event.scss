@@ -6,8 +6,17 @@ page-event {
   .lblSmall{
       font-size: smaller;
   }
+
   .lblSmaller{
     font-size: smaller;
     color: lightsteelblue;
+  }
+
+  .lblNoEvent{
+    margin-top: -10px;
+    font-size: 0.9em;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    color: darkgrey;
   }
 }

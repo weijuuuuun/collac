@@ -32,6 +32,10 @@
             <ion-label align="right" class="lblSmaller" (click)="addTaskAlert()">Add Task</ion-label>
         </ion-item>
 
+        <ion-item *ngIf="tasksIsEmpty">
+            <ion-label align="center" class="lblNoEvent">No Task</ion-label>
+        </ion-item>
+
         <ion-item *ngFor="let task of tasks">
             <ion-label>{{task.title}}</ion-label>
             <ion-label align="right" class="lblSmall">{{task.assigned.firstName}}</ion-label>
