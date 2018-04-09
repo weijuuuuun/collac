@@ -6,6 +6,8 @@ import {EventService} from "../../providers/EventService";
 import {UserService} from "../../providers/UserService";
 import {User} from "../../models/User";
 import {LocalStorageHelper} from "../../helpers/LocalStorageHelper";
+import {TaskService} from "../../providers/TaskService";
+import {Task} from "../../models/Task";
 
 @IonicPage()
 @Component({
@@ -22,7 +24,8 @@ export class EventPage {
     endTime: string;
     notes: string;
     memberList: any;
-    owner: any;
+    ownerId: any;
+    ownerName: any;
     tasks: any;
     loggedInUser: User;
     friendList: any;
@@ -35,6 +38,7 @@ export class EventPage {
                 public alertCtrl: AlertController,
                 private eventService: EventService,
                 private userService: UserService,
+                private taskService: TaskService,
                 private localStorageHelper: LocalStorageHelper) {
 
         this.id = this.navParams.get("itemId");
@@ -46,15 +50,11 @@ export class EventPage {
     addTaskAlert() {
         this.alertCtrl.create({
             title: "Add Task",
-            message: "Please input user's Email",
+            message: "Please input Task title",
             inputs: [
                 {
-                    name: 'username',
-                    placeholder: 'Username or Email'
-                },
-                {
                     name: 'title',
-                    placeholder: 'Task Name'
+                    placeholder: 'Task Title'
                 }
             ],
             buttons: [
@@ -69,21 +69,26 @@ export class EventPage {
                     text: 'Add',
                     role: 'submit',
                     handler: data => {
-                        for (let i = 0; i < this.memberList.length; i++) {
-                            if (data.username == this.memberList[i].email) {
-                                console.log(this.memberList[i].id);
-                                console.log(data.title);
-                                this.alertCtrl.create({
-                                    title: 'Successful',
-                                    message: 'User has been added',
-                                    buttons: [
-                                        {
-                                            text: 'ok'
-                                        }
-                                    ]
-                                }).present();
-                            }
+                        console.log(data.title);
+                        let newTaskToCreate: Task = {
+                            creator:{
+                                id: this.userId
+                            },
+                            title: data.title
                         }
+                        // console.log(newTaskToCreate);
+                        this.eventService.createTask(newTaskToCreate,this.id)
+                            .subscribe(newTaskId => {
+                                newTaskToCreate.id = newTaskId
+
+                                // Clone current tasks
+                                let newTask = this.tasks.slice(0);
+                                newTask.push(newTaskToCreate);
+
+                                // Update task
+                                this.eventService.updateEventTasks(newTask);
+                                this.getEventTasks();
+                            })
                     }
                 }
             ]
@@ -202,7 +207,8 @@ export class EventPage {
         this.eventService.getEventOwner(this.id)
             .subscribe(ownerData => {
                 console.log("event.ts: retrieved owner data.");
-                this.owner = ownerData.id;
+                this.ownerId = ownerData.id;
+                this.ownerName = ownerData.firstName;
                 //console.log(ownerData);
             }, err => {
                 console.log("event.ts: error getting owner data");
@@ -211,18 +217,52 @@ export class EventPage {
     }
 
     getEventTasks() {
+        this.eventService.populateEventTasks(this.id);
         this.eventService.getEventTask(this.id)
             .subscribe(eventTask => {
                 console.log("event.ts: retrieved tasks");
-                //console.log(eventTask);
+                console.log(eventTask);
                 this.tasks = eventTask;
 
                 if(eventTask.length == 0) {
                     this.tasksIsEmpty = true;
                 }
-
                 this.tasksIsEmpty = false
             })
+    }
+
+    assignTask(taskId: number){
+        let showMembers = this.alertCtrl.create();
+        showMembers.setTitle("Assign Member");
+
+        showMembers.addInput({
+            type: 'radio',
+            label: this.ownerName,
+            value: this.ownerId
+        });
+
+        // add members to list
+        for(let i = 0; i < this.memberList.length; i++) {
+            showMembers.addInput({
+                type: 'radio',
+                label: this.memberList[i].firstName,
+                value: this.memberList[i].id
+            });
+        }
+
+        showMembers.addButton('Cancel');
+        showMembers.addButton({
+            text: 'Assign',
+            handler: (data: number) => {
+                this.eventService.setAssigned(taskId,data)
+                    .subscribe(assigned =>{
+                        console.log(assigned);
+                        console.log("assigned: " + data);
+                    })
+            }
+        });
+
+        showMembers.present();
     }
 
 }

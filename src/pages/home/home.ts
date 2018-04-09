@@ -89,21 +89,23 @@ export class HomePage {
                             notes: newEventToCreate.description
                         });
 
+                        console.log(this.eventSource);
+
                         // Add Members to Event
-                        if (data.member.length > 0) {
-                            let newMembers : any = [];
-                            for (let i = 0; i < data.member.length; i++) {
-                                let id : any = {
-                                    id : data.member[i]
-                                }
-                                newMembers.push(id);
-                            }
-                            console.log(newMembers);
+                        // if (data.member.length > 0) {
+                        //     let newMembers : any = [];
+                        //     for (let i = 0; i < data.member.length; i++) {
+                        //         let id : any = {
+                        //             id : data.member[i]
+                        //         }
+                        //         newMembers.push(id);
+                        //     }
+                        //     console.log(newMembers);
                             // this.eventService.eventAddMember(newEventToCreate.id, newMembers)
                             //     .subscribe(member => {
                             //         console.log(member);
                             //     })
-                        }
+                        // }
                         this.myCalendar.loadEvents();
                         this.userService.updateCachedEvent(newEvents);
                     });

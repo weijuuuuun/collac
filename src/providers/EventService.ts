@@ -7,10 +7,15 @@ import {Event} from "../models/Event";
 import {Http} from "@angular/http";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
+import {Task} from "../models/Task";
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 
 @Injectable()
 export class EventService {
+
+    private eventTaskSubject: BehaviorSubject<Array<Task>> = new BehaviorSubject([]);
+
 
     /**
      * All codes calling  external backend, should be in Service class
@@ -136,6 +141,28 @@ export class EventService {
             );
     }
 
+    public createTask(task: Task,eventId: number): Observable<number>{
+        return this.http.post<any>(`http://localhost:9001/events/${eventId}/tasks`, task);
+    }
 
+    public populateEventTasks(eventId: number){
+        return this.getEventTask(eventId)
+            .map(tasks =>{
+                this.eventTaskSubject.next(tasks);
+                return tasks;
+            })
+    }
+
+    public updateEventTasks(newTask: Task[]) {
+        //console.log(newEvents);
+        this.eventTaskSubject.next(newTask);
+    }
+
+    public setAssigned(taskId: number, userId: number){
+        let assigned: any = {
+            assigned: userId
+        }
+        return this.http.post<any>(`http://localhost:9001/tasks/${taskId}/assigned`, assigned);
+    }
 
 }

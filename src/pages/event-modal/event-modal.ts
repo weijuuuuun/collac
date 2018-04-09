@@ -44,11 +44,11 @@ export class EventModalPage {
                 this.loggedInUser = user;
                 this.userService.getFriends(this.loggedInUser.id)
                     .subscribe(friendsData => {
-                        console.log("event-modal.ts: Received friends data.");
+                        //console.log("event-modal.ts: Received friends data.");
                         console.log(friendsData);
                         this.memberList = friendsData;
                     }, err => {
-                        console.log("event-modal.ts: Error getting friends data");
+                        //console.log("event-modal.ts: Error getting friends data");
                         console.log(err);
                     })
             });

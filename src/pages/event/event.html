@@ -37,8 +37,8 @@
         </ion-item>
 
         <ion-item *ngFor="let task of tasks">
-            <ion-label>{{task.title}}</ion-label>
-            <ion-label align="right" class="lblSmall">{{task.assigned.firstName}}</ion-label>
+            <ion-label (click)="assignTask(task.id)">{{task.title}}</ion-label>
+            <ion-label align="right" class="lblSmall" *ngIf="task.assigned">{{task.assigned.firstName}}</ion-label>
         </ion-item>
     </ion-list>
 
