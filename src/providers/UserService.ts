@@ -190,7 +190,8 @@ export class UserService {
                     users{
                         id,
                         firstName,
-                        lastName
+                        lastName,
+                        email
                     }
                 }
             `
@@ -201,5 +202,17 @@ export class UserService {
                     return result.data.users;
                 })
             );
+    }
+
+    public addContact(requester: number, accepter: number): Observable<any> {
+        let friendship: any = {
+            friendRequester:{
+                id: requester
+            },
+            friendAccepter:{
+                id: accepter
+            }
+        }
+        return this.http.post<any>(`http://localhost:9001/friendship`, friendship);
     }
 }

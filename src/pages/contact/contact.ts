@@ -12,7 +12,9 @@ import {User} from "../../models/User";
 })
 export class ContactPage {
     contactLists: any;
+    userLists: any;
     loggedInUser: User;
+    userId: any;
 
     constructor(public navCtrl: NavController,
                 public navParams: NavParams,
@@ -29,11 +31,13 @@ export class ContactPage {
                     console.log("contact.ts: No logged in user data");
                 }
                 this.loggedInUser = user;
+                this.userId = user.id;
                 this.userService.getFriends(this.loggedInUser.id)
                     .subscribe(friendsData => {
                         console.log("contact.ts: Received friends data.");
                         //console.log(friendsData);
                         this.contactLists = friendsData;
+
                     }, err => {
                         console.log("contact.ts: Error getting friends data");
                         console.log(err);
@@ -75,6 +79,19 @@ export class ContactPage {
                     role: 'submit',
                     handler: data => {
                         console.log(data.username);
+                        this.userService.getUsers()
+                            .subscribe(allUsers => {
+                                this.userLists = allUsers
+                                for (let i = 0; i < this.userLists.length; i++){
+                                    if(data.username == this.userLists[i].email){
+                                        console.log(this.userLists[i].id);
+                                        this.userService.addContact(this.userId, this.userLists[i].id)
+                                            .subscribe(friendship => {
+                                                console.log(friendship);
+                                            })
+                                    }
+                                }
+                            })
                     }
                 }
             ]
