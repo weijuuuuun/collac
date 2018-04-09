@@ -163,18 +163,11 @@ export class HomePage {
     }
 
     onEventSelected(event) {
-        /* test console
-        console.log("Title:" + event.title);
-        console.log("Start: " + event.startTime);
-        console.log("End: " + event.endTime);
-        console.log("Noti: " + event.notification);
-        console.log("Group: " + event.group);
-        */
         let end = moment(event.endTime).format('llll');
 
         let alert = this.alertCtrl.create({
             title: ' ' + event.title,
-            subTitle: 'Due: ' + end + '<br>With: ' + event.group,
+            subTitle: 'Due: ' + end,
             buttons: [
                 {
                     text: 'Cancel',
@@ -189,7 +182,7 @@ export class HomePage {
                         this.navCtrl.push(EventPage, {
                             itemId: event.id,
                             itemTitle: event.title,
-                            itemDue: event.due,
+                            itemDue: event.endTime,
                             itemNotes: event.notes
                         });
                     }
@@ -197,7 +190,7 @@ export class HomePage {
                 {
                     text: "Message",
                     handler: () => {
-                        console.log('Open messanger');
+                        console.log('Open messenger');
                         this.navCtrl.push(ChatPage, {
                             title: event.title,
                             id: event.id

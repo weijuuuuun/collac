@@ -233,13 +233,13 @@ export class EventPage {
         this.eventService.getEventTask(this.id)
             .subscribe(eventTask => {
                 console.log("event.ts: retrieved tasks");
-                console.log(eventTask);
+                // console.log(eventTask);
                 this.tasks = eventTask;
+                this.tasksIsEmpty = false
 
                 if(eventTask.length == 0) {
                     this.tasksIsEmpty = true;
                 }
-                this.tasksIsEmpty = false
             })
     }
 
