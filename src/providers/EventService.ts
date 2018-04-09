@@ -63,10 +63,6 @@ export class EventService {
         return this.http.post<number>(`http://localhost:9001/events`, event);
     }
 
-    public eventAddMember(eventId: number, newMembers: any){
-        return this.http.post<any>(`http://localhost:9001/events/${eventId}/members`,newMembers)
-    }
-
     public getEventMember(eventID: number) {
         return this.apollo.watchQuery<any>({
             query: gql`
@@ -163,6 +159,13 @@ export class EventService {
             assigned: userId
         }
         return this.http.post<any>(`http://localhost:9001/tasks/${taskId}/assigned`, assigned);
+    }
+
+    public eventAddMember(eventId: number, newMembers: any){
+        let addMembers: any = {
+            newMembers: newMembers
+        }
+        return this.http.post<any>(`http://localhost:9001/events/${eventId}/members`,addMembers)
     }
 
 }

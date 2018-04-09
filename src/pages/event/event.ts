@@ -157,7 +157,19 @@ export class EventPage {
         memberAlert.addButton({
             text: 'Add',
             handler: (data: any) => {
-                console.log("Add Member: " + data);
+                console.log(data);
+                let newMembersToAdd: any = [];
+                for(let i = 0; i < data.length; i++){
+                    newMembersToAdd.push({
+                        id: data[i]
+                    });
+                }
+                console.log(newMembersToAdd);
+                this.eventService.eventAddMember(this.id,newMembersToAdd)
+                    .subscribe(addMember => {
+                        console.log(addMember);
+                    })
+
             }
         });
 
