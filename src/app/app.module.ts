@@ -78,9 +78,19 @@ var config = {
 export class AppModule {
 
   constructor(apollo: Apollo, httpLink: HttpLink){
+
+
     apollo.create({
         link: httpLink.create({uri: 'http://localhost:9001/graphql'}),
-        cache: new InMemoryCache()
+        cache: new InMemoryCache(),
+        defaultOptions: {
+          query: {
+            fetchPolicy: 'network-only'
+          },
+          watchQuery: {
+            fetchPolicy: 'network-only'
+          }
+        }
     });
   }
 }

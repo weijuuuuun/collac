@@ -163,6 +163,10 @@ export class UserService {
         this.userEventsSubject.next(newEvents);
     }
 
+  public updateCachedTasks(newTask: Task[]) {
+    this.userTasksSubject.next(newTask);
+  }
+
     public getUser(userId: number): Observable<any> {
         return this.apollo.watchQuery<any>({
             query: gql`

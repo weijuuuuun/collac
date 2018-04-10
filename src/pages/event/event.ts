@@ -32,6 +32,8 @@ export class EventPage {
     tempUserFirstname: any;
     tempUserId: any;
     tasksIsEmpty: boolean = true;
+    cachedUserTasks: any = [];
+
 
     constructor(public navCtrl: NavController,
                 public navParams: NavParams,
@@ -45,6 +47,10 @@ export class EventPage {
         this.title = this.navParams.get("itemTitle");
         this.endTime = moment(this.navParams.get("itemDue")).format('lll');
         this.notes = this.navParams.get("itemNotes");
+
+    this.userService.getTasksObservable().subscribe(tasks => {
+        this.cachedUserTasks = tasks;
+      })
     }
 
     addTaskAlert() {
@@ -75,19 +81,30 @@ export class EventPage {
                                 id: this.userId
                             },
                             title: data.title
-                        }
+                        };
                         // console.log(newTaskToCreate);
                         this.eventService.createTask(newTaskToCreate,this.id)
                             .subscribe(newTaskId => {
-                                newTaskToCreate.id = newTaskId
+                                newTaskToCreate.id = newTaskId;
+                                  console.log("=========NEW CACHED TASK==");
+                                  let newTask = {
+                                    id: newTaskId,
+                                    title: data.title
+                                  };
 
                                 // Clone current tasks
-                                let newTask = this.tasks.slice(0);
-                                newTask.push(newTaskToCreate);
+                                let newCachedTasks = this.cachedUserTasks.slice(0);
+                                let newTasks       = this.tasks.slice(0);
+
+                                newCachedTasks.push(newTask);
+
+                                newTasks.push(newTask);
 
                                 // Update task
-                                this.eventService.updateEventTasks(newTask);
-                                this.getEventTasks();
+                                this.userService.updateCachedTasks(newCachedTasks);
+                                // this.getEventTasks();
+                                this.tasks = newTasks;
+
                             })
                     }
                 }
@@ -99,8 +116,12 @@ export class EventPage {
         let memberAlert = this.alertCtrl.create();
         memberAlert.setTitle('Add Member');
 
+        console.log("=====MEMBERS LIST==");
+        console.log(this.memberList);
         if (this.memberList.length == 0) {
             for (let i = 0; i < this.friendList.length; i++) {
+
+                console.log(this.friendList[1].firstName);
                 memberAlert.addInput({
                     type: 'checkbox',
                     label: this.friendList[i].firstName,
@@ -196,6 +217,8 @@ export class EventPage {
                 this.userLastname = user.lastName;
                 this.userService.getFriends(this.loggedInUser.id)
                     .subscribe(friendsData => {
+                        console.log("FRIENDS: ");
+                        console.log(friendsData);
                         this.friendList = friendsData;
                     }), err => {
                     console.log(err);
@@ -229,17 +252,18 @@ export class EventPage {
     }
 
     getEventTasks() {
-        this.eventService.populateEventTasks(this.id);
         this.eventService.getEventTask(this.id)
             .subscribe(eventTask => {
                 console.log("event.ts: retrieved tasks");
+                console.log(eventTask);
                 // console.log(eventTask);
                 this.tasks = eventTask;
-                this.tasksIsEmpty = false
+                this.tasksIsEmpty = false;
 
                 if(eventTask.length == 0) {
                     this.tasksIsEmpty = true;
                 }
+
             })
     }
 
@@ -253,8 +277,12 @@ export class EventPage {
             value: this.ownerId
         });
 
+        console.log("Member list from assign task");
+        console.log(this.memberList);
+
         // add members to list
         for(let i = 0; i < this.memberList.length; i++) {
+            console.log("Adding for: " + this.memberList[i].firstName);
             showMembers.addInput({
                 type: 'radio',
                 label: this.memberList[i].firstName,
@@ -268,8 +296,12 @@ export class EventPage {
             handler: (data: number) => {
                 this.eventService.setAssigned(taskId,data)
                     .subscribe(assigned =>{
+
                         console.log(assigned);
                         console.log("assigned: " + data);
+                        this.getEventTasks();
+
+
                     })
             }
         });

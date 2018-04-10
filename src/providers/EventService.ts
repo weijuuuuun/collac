@@ -149,6 +149,8 @@ export class EventService {
             })
     }
 
+
+
     public updateEventTasks(newTask: Task[]) {
         //console.log(newEvents);
         this.eventTaskSubject.next(newTask);

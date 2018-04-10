@@ -85,6 +85,9 @@ export class MyApp {
 
         this.userService.getTasksObservable()
           .subscribe(tasks => {
+
+            console.log("app.component.ts: Called task subscribe");
+            console.log(tasks);
             this.cachedUserEvents = events;
             this.cachedUserTasks = tasks;
             this.initializeOptions();
